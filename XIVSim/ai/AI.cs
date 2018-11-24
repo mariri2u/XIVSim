@@ -5,7 +5,7 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    abstract class AICore
+    public abstract class AI
     {
         protected const double eps = 1.0e-7;
 
@@ -15,13 +15,13 @@ namespace xivsim.ai
         private double delta;
         private double totalDmg;
 
-        protected Dictionary<string, Action> actions;
+        protected Dictionary<string, IAction> actions;
 
         private Logger logs;
 
         protected BattleData data;
 
-        protected Action used;
+        protected IAction used;
 
         public BattleData Data
         {
@@ -29,23 +29,24 @@ namespace xivsim.ai
         }
 
         protected abstract DamageTable CreateTable();
-        protected abstract Dictionary<string, Action> CreateActions();
+        protected abstract Dictionary<string, IAction> CreateActions();
 
-        public AICore(double delta, string fname)
+        public AI(double delta, string fname)
         {
             this.delta = delta;
             this.data = new BattleData();
             logs = new Logger(fname);
         }
 
-        public void PreInit()
-        {
-            data.Table = this.CreateTable();
-            actions = this.CreateActions();
-        }
+        protected abstract void PreInit();
 
         public void Init()
         {
+            PreInit();
+
+            data.Table = this.CreateTable();
+            actions = this.CreateActions();
+
             this.time = 0.0;
             totalDmg = 0.0;
 
@@ -58,20 +59,24 @@ namespace xivsim.ai
             data.Recast["motion"] = 0.0;
             data.Recast["dot"] = dotTick;
 
-            foreach (Action act in actions.Values)
+            foreach (IAction act in actions.Values)
             {
                 act.Data = data;
                 act.AI = this;
-                if (act is Ability)
+                if (act is IAbility)
                 {
                     data.Recast[act.Name] = 0.0;
                 }
-                else if (act is DoT)
+                else if (act is IDoT dot)
                 {
-                    data.DoTs[act.Name] = (DoT)act;
+                    data.DoTs[act.Name] = dot;
                 }
             }
+
+            PostInit();
         }
+
+        protected abstract void PostInit();
 
         public void Step()
         {
@@ -105,14 +110,11 @@ namespace xivsim.ai
         {
             if (data.Recast["dot"] < eps)
             {
-                foreach (DoT dot in data.DoTs.Values)
+                foreach (IDoT dot in data.DoTs.Values)
                 {
-                    if ( dot.Remain > 0.0)
-                    {
-                        data.Damage["dot"] += data.Table.Calc(dot.Slip);
-                    }
+                    dot.Tick();
                 }
-                // DoTダメージを計算すればDoTTickを更新
+                // DoTTickを更新
                 data.Recast["dot"] = dotTick;
             }
         }

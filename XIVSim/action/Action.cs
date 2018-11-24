@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.action;
 using xivsim.ai;
 
 namespace xivsim.action
 {
-    abstract class Action
+    public abstract class Action : IAction
     {
         protected const double eps = 1.0e-7;
 
@@ -25,15 +24,15 @@ namespace xivsim.action
             this.motion = motion;
         }
 
-        abstract public bool IsAction();
-        abstract public void Calc();
+        public abstract bool IsAction();
+        public abstract void Calc();
 
         public BattleData Data
         {
             get; set;
         }
 
-        public AICore AI
+        public AI AI
         {
             get; set;
         }
@@ -63,11 +62,11 @@ namespace xivsim.action
             get { return motion; }
         }
 
-        public static Dictionary<string, Action> ListToMap(List<Action> list)
+        public static Dictionary<string, IAction> ListToMap(List<IAction> list)
         {
-            Dictionary<string, Action> map = new Dictionary<string, Action>();
+            Dictionary<string, IAction> map = new Dictionary<string, IAction>();
 
-            foreach( Action act in list )
+            foreach (IAction act in list)
             {
                 map[act.Name] = act;
             }

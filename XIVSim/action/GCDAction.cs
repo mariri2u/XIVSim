@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using xivsim.ai;
 
 namespace xivsim.action
 {
-    class WeaponSkill : Action
+    class GCDAction : Action
     {
-        public WeaponSkill(string name, int power, double cast, double recast) : base(name, power, cast, recast, 0.1)
+        public GCDAction(string name, int power, double cast, double recast) : base(name, power, cast, recast, 0.1)
         {
         }
 

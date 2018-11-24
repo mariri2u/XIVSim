@@ -5,7 +5,7 @@ using System.IO;
 
 namespace xivsim
 {
-    class Logger
+    public class Logger
     {
         struct Log
         {

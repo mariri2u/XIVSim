@@ -5,23 +5,27 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    class AstAI : AICore
+    public class AstAI : AI
     {
         public AstAI(double delta) : base(delta, @"ast_combat.csv") { }
+
+        protected override void PreInit() { }
+
+        protected override void PostInit() { }
 
         protected override DamageTable CreateTable()
         {
             return new DamageTable();
         }
 
-        protected override Dictionary<string, Action> CreateActions()
+        protected override Dictionary<string, IAction> CreateActions()
         {
             double gcd = 2.45;
             double cast = 1.47;
 
-            List<Action> actions = new List<Action>();
-            actions.Add(new WeaponSkill("マレフィガ", 220, cast, gcd));
-            actions.Add(new DoT("コンバラ", 0, 0.0, gcd, 50, 30));
+            List<IAction> actions = new List<IAction>();
+            actions.Add(new GCDAction("マレフィガ", 220, cast, gcd));
+            actions.Add(new GCDDoT("コンバラ", 0, 0.0, gcd, 50, 30));
             actions.Add(new Ability("クラウンロード", 300, 90));
             actions.Add(new Ability("アーサリースター", 200, 60));
 
@@ -34,9 +38,9 @@ namespace xivsim.ai
             if (data.Recast["global"] < eps)
             {
                 // DoT更新
-                foreach (Action act in actions.Values)
+                foreach (IAction act in actions.Values)
                 {
-                    if (act is DoT dot && act.IsAction())
+                    if (act is GCDDoT dot && act.IsAction())
                     {
                         act.Calc();
                         used = act;
@@ -45,9 +49,9 @@ namespace xivsim.ai
                 }
 
                 // DoT更新が不要な場合
-                foreach (Action act in actions.Values)
+                foreach (IAction act in actions.Values)
                 {
-                    if (act is WeaponSkill && act.IsAction())
+                    if (act is GCDAction && act.IsAction())
                     {
                         act.Calc();
                         used = act;
@@ -58,9 +62,9 @@ namespace xivsim.ai
             // アビリティ (GCDアクションを行わない場合)
             else
             {
-                foreach (Action act in actions.Values)
+                foreach (IAction act in actions.Values)
                 {
-                    if (act is Ability && act.IsAction())
+                    if (act is IAbility && act.IsAction())
                     {
                         act.Calc();
                         used = act;

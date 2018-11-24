@@ -23,8 +23,7 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            AICore ai = new WhmAI(delta);
-            ai.PreInit();
+            AI ai = new WhmAI(delta);
             ai.Init();
 
             for (double time = 0.0; time <= 1200; time += delta)
@@ -40,8 +39,7 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            AICore ai = new AstAI(delta);
-            ai.PreInit();
+            AI ai = new AstAI(delta);
             ai.Init();
 
             for (double time = 0.0; time <= 1200; time += delta)

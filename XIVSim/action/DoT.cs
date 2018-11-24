@@ -4,7 +4,7 @@ using System.Text;
 
 namespace xivsim.action
 {
-    class DoT : Action
+    public abstract class DoT : Action, IDoT
     {
         protected int slip;
         protected int duration;
@@ -15,29 +15,16 @@ namespace xivsim.action
             this.duration = duration;
         }
 
-        public override bool IsAction()
+        public void Tick()
         {
-            return (this.Remain < this.Cast + this.Recast);
-        }
-
-        public override void Calc()
-        {
-            Data.DoTs[this.Name] = this;
-            this.Remain = this.Duration;
-            Data.Recast["cast"] = this.Cast;
-            Data.Recast["motion"] = this.Motion;
-            Data.Recast["global"] = this.Recast;
-
-            // 着弾ダメージがある場合
-            if (this.Power > eps)
+            if (this.Remain > 0.0)
             {
-                Data.Damage["action"] = Data.Table.Calc(this.Power);
+                Data.Damage["dot"] += Data.Table.Calc(this.Slip);
             }
-            Data.History.AddFirst(this);
         }
 
         public double Remain { get; set; }
-            
+
         public int Slip
         {
             get { return slip; }

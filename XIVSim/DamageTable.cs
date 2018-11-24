@@ -4,7 +4,7 @@ using System.Text;
 
 namespace xivsim
 {
-    class DamageTable
+    public class DamageTable
     {
         private readonly int x0;
         private readonly double y0;
