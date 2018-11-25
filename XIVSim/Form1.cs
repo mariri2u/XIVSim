@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using xivsim.ai;
+using xivsim.jobai;
 
 namespace xivsim
 {
@@ -23,7 +23,7 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            AI ai = new WhmAI(delta);
+            JobAI ai = new WhmAI(delta);
             ai.Init();
 
             for (double time = 0.0; time <= 1200; time += delta)
@@ -39,7 +39,7 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            AI ai = new AstAI(delta);
+            JobAI ai = new AstAI(delta);
             ai.Init();
 
             for (double time = 0.0; time <= 1200; time += delta)

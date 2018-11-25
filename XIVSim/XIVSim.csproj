@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="actionai\AbilityAI.cs" />
+    <Compile Include="actionai\ActionAI.cs" />
+    <Compile Include="actionai\GCDActionAI.cs" />
+    <Compile Include="actionai\GCDDoTAI.cs" />
     <Compile Include="action\Action.cs" />
     <Compile Include="action\DoT.cs" />
     <Compile Include="action\IAbility.cs" />
@@ -48,10 +52,10 @@
     <Compile Include="action\IDoT.cs" />
     <Compile Include="action\GCDDoT.cs" />
     <Compile Include="action\GCDAction.cs" />
-    <Compile Include="ai\AstAI.cs" />
-    <Compile Include="ai\WhmAI.cs" />
+    <Compile Include="jobai\AstAI.cs" />
+    <Compile Include="jobai\WhmAI.cs" />
     <Compile Include="BattleData.cs" />
-    <Compile Include="ai\AI.cs" />
+    <Compile Include="jobai\JobAI.cs" />
     <Compile Include="DamageTable.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.ai;
+using xivsim.jobai;
+using xivsim.actionai;
 
 namespace xivsim.action
 {
@@ -15,52 +16,27 @@ namespace xivsim.action
         protected double recast;
         protected double motion;
 
-        public Action(string name, int power, double cast, double recast, double motion)
+        public string Name { get { return name; } }
+        public int Power { get { return power; } }
+        public double Cast { get { return cast; } }
+        public double Recast { get { return recast; } }
+        public double Motion { get { return motion; } }
+
+        public BattleData Data { get; set; }
+        public ActionAI AI { get; set; }
+
+        public Action(string name, int power, double cast, double recast, double motion, ActionAI ai)
         {
             this.name = name;
             this.power = power;
             this.cast = cast;
             this.recast = recast;
             this.motion = motion;
+            ai.Action = this;
+            this.AI = ai;
         }
 
-        public abstract bool IsAction();
-        public abstract void Calc();
-
-        public BattleData Data
-        {
-            get; set;
-        }
-
-        public AI AI
-        {
-            get; set;
-        }
-
-        public string Name
-        {
-            get { return name; }
-        }
-
-        public int Power
-        {
-            get { return power; }
-        }
-
-        public double Cast
-        {
-            get { return cast; }
-        }
-
-        public double Recast
-        {
-            get { return recast; }
-        }
-
-        public double Motion
-        {
-            get { return motion; }
-        }
+        public abstract IAction Calc();
 
         public static Dictionary<string, IAction> ListToMap(List<IAction> list)
         {

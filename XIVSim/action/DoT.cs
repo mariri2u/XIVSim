@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using xivsim.actionai;
 
 namespace xivsim.action
 {
@@ -9,7 +10,13 @@ namespace xivsim.action
         protected int slip;
         protected int duration;
 
-        public DoT(string name, int power, double cast, double recast, int slip, int duration) : base(name, power, cast, recast, 0.1)
+        public int Slip { get { return slip; } }
+        public int Duration { get { return duration; } }
+
+        public double Remain { get; set; }
+
+        public DoT(string name, int power, double cast, double recast, int slip, int duration, ActionAI ai)
+            : base(name, power, cast, recast, 0.1, ai)
         {
             this.slip = slip;
             this.duration = duration;
@@ -23,16 +30,5 @@ namespace xivsim.action
             }
         }
 
-        public double Remain { get; set; }
-
-        public int Slip
-        {
-            get { return slip; }
-        }
-
-        public int Duration
-        {
-            get { return duration; }
-        }
     }
 }

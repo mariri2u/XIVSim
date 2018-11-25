@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using xivsim.actionai;
 
 namespace xivsim.action
 {
     class GCDDoT : DoT
     {
         public GCDDoT(string name, int power, double cast, double recast, int slip, int duration) :
-            base(name, power, cast, recast, slip, duration)
+            base(name, power, cast, recast, slip, duration, new GCDDoTAI())
         { }
 
-        public override bool IsAction()
-        {
-            return (this.Remain < this.Cast + this.Recast);
-        }
-
-        public override void Calc()
+        public override IAction Calc()
         {
             Data.DoTs[this.Name] = this;
             this.Remain = this.Duration;
@@ -29,6 +25,8 @@ namespace xivsim.action
                 Data.Damage["action"] = Data.Table.Calc(this.Power);
             }
             Data.History.AddFirst(this);
+
+            return this;
         }
     }
 }

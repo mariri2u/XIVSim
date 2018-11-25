@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
 
-namespace xivsim.ai
+namespace xivsim.jobai
 {
-    public abstract class AI
+    public abstract class JobAI
     {
         protected const double eps = 1.0e-7;
 
@@ -13,6 +13,8 @@ namespace xivsim.ai
 
         private double time;
         private double delta;
+        private int frame;
+        private int fps;
         private double totalDmg;
 
         protected Dictionary<string, IAction> actions;
@@ -28,12 +30,19 @@ namespace xivsim.ai
             get { return data; }
         }
 
+        public IAction Used
+        {
+            get { return used; }
+        }
+
         protected abstract DamageTable CreateTable();
         protected abstract Dictionary<string, IAction> CreateActions();
 
-        public AI(double delta, string fname)
+        public JobAI(double delta, string fname)
         {
             this.delta = delta;
+            this.frame = 0;
+            this.fps = (int)(1 / delta);
             this.data = new BattleData();
             logs = new Logger(fname);
         }
@@ -62,7 +71,7 @@ namespace xivsim.ai
             foreach (IAction act in actions.Values)
             {
                 act.Data = data;
-                act.AI = this;
+                act.AI.Data = data;
                 if (act is IAbility)
                 {
                     data.Recast[act.Name] = 0.0;
@@ -119,7 +128,8 @@ namespace xivsim.ai
             }
         }
 
-        private void ActionDamage()
+        // 召喚でエギのAIも模擬する場合はオーバーライドが必要
+        protected virtual void ActionDamage()
         {
             // キャスト中・モーション中は行動不可
             if (data.Recast["cast"] < eps && data.Recast["motion"] < eps)
@@ -206,6 +216,7 @@ namespace xivsim.ai
                 data.DoTs[key].Remain -= delta;
             }
 
+            frame++;
             time += delta;
         }
     }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
 
-namespace xivsim.ai
+namespace xivsim.jobai
 {
-    public class AstAI : AI
+    public class AstAI : JobAI
     {
         public AstAI(double delta) : base(delta, @"ast_combat.csv") { }
 
@@ -34,16 +34,15 @@ namespace xivsim.ai
 
         protected override void AIAction()
         {
-            // 魔法・WS
+            // GCDアクション
             if (data.Recast["global"] < eps)
             {
                 // DoT更新
                 foreach (IAction act in actions.Values)
                 {
-                    if (act is GCDDoT dot && act.IsAction())
+                    if (act is GCDDoT dot && act.AI.IsAction())
                     {
-                        act.Calc();
-                        used = act;
+                        used = act.Calc();
                         return;
                     }
                 }
@@ -51,10 +50,9 @@ namespace xivsim.ai
                 // DoT更新が不要な場合
                 foreach (IAction act in actions.Values)
                 {
-                    if (act is GCDAction && act.IsAction())
+                    if (act is GCDAction && act.AI.IsAction())
                     {
-                        act.Calc();
-                        used = act;
+                        used = act.Calc();
                         return;
                     }
                 }
@@ -64,10 +62,9 @@ namespace xivsim.ai
             {
                 foreach (IAction act in actions.Values)
                 {
-                    if (act is IAbility && act.IsAction())
+                    if (act is IAbility && data.Recast[act.Name] < eps && act.AI.IsAction())
                     {
-                        act.Calc();
-                        used = act;
+                        used = act.Calc();
                         return;
                     }
                 }
