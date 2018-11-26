@@ -5,11 +5,11 @@ using xivsim.action;
 
 namespace xivsim.actionai
 {
-    public class GCDActionAI : ActionAI
+    public class NoInterruptGCD : ActionAI
     {
         public override bool IsAction()
         {
-            return true;
+            return (Action.Motion < Data.Recast["global"]);
         }
     }
 }

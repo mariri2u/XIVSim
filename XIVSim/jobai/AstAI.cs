@@ -34,41 +34,35 @@ namespace xivsim.jobai
 
         protected override void AIAction()
         {
-            // GCDアクション
-            if (data.Recast["global"] < eps)
+            // GCD: DoT更新する場合
+            foreach (IAction act in actions.Values)
             {
-                // DoT更新
-                foreach (IAction act in actions.Values)
+                if (act is GCDDoT dot && act.CanAction() && act.AI.IsAction())
                 {
-                    if (act is GCDDoT dot && act.AI.IsAction())
-                    {
-                        used = act.Calc();
-                        return;
-                    }
+                    used = act.CalcAction();
+                    return;
                 }
+            }
 
-                // DoT更新が不要な場合
-                foreach (IAction act in actions.Values)
-                {
-                    if (act is GCDAction && act.AI.IsAction())
-                    {
-                        used = act.Calc();
-                        return;
-                    }
-                }
-            }
-            // アビリティ (GCDアクションを行わない場合)
-            else
+            // GCD: DoT更新が不要な場合
+            foreach (IAction act in actions.Values)
             {
-                foreach (IAction act in actions.Values)
+                if (act is GCDAction && act.CanAction() && act.AI.IsAction())
                 {
-                    if (act is IAbility && data.Recast[act.Name] < eps && act.AI.IsAction())
-                    {
-                        used = act.Calc();
-                        return;
-                    }
+                    used = act.CalcAction();
+                    return;
                 }
             }
+
+            // アビリティ (GCDアクションを行わない場合)
+            foreach (IAction act in actions.Values)
+            {
+                if (act is IAbility && act.CanAction() && act.AI.IsAction())
+                {
+                    used = act.CalcAction();
+                    return;
+                }
+            }            
         }
     }
 }

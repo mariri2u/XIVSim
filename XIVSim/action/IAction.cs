@@ -17,6 +17,10 @@ namespace xivsim.action
         double Recast { get; }
         double Motion { get; }
 
-        IAction Calc();
+        // 現在の状態から判断してアクションを実行できるか判断する
+        bool CanAction();
+
+        // アクションを実行する (アクションの実行可否は判断済みとする)
+        IAction CalcAction();
     }
 }

@@ -91,7 +91,7 @@ namespace xivsim.jobai
         {
             InitStep();
             DoTTick();
-            ActionDamage();
+            AIAction();
             MergeDamage();
             Dump();
             StepToNext();
@@ -125,17 +125,6 @@ namespace xivsim.jobai
                 }
                 // DoTTickを更新
                 data.Recast["dot"] = dotTick;
-            }
-        }
-
-        // 召喚でエギのAIも模擬する場合はオーバーライドが必要
-        protected virtual void ActionDamage()
-        {
-            // キャスト中・モーション中は行動不可
-            if (data.Recast["cast"] < eps && data.Recast["motion"] < eps)
-            {
-                // 行動の可否のみを判断して、実際の行動は個々のAIに判断を任せる
-                AIAction();
             }
         }
 

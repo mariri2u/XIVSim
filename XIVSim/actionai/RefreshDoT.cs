@@ -5,11 +5,11 @@ using xivsim.action;
 
 namespace xivsim.actionai
 {
-    public class GCDDoTAI : ActionAI
+    public class RefreshDoT : ActionAI
     {
         public override bool IsAction()
         {
-            if (Action is GCDDoT dot)
+            if (Action is DoT dot)
             {
                 return (dot.Remain < dot.Cast + dot.Recast);
             }

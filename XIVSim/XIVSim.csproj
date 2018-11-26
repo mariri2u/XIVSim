@@ -40,10 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actionai\AbilityAI.cs" />
+    <Compile Include="actionai\NoInterruptGCD.cs" />
     <Compile Include="actionai\ActionAI.cs" />
-    <Compile Include="actionai\GCDActionAI.cs" />
-    <Compile Include="actionai\GCDDoTAI.cs" />
+    <Compile Include="actionai\AlwaysAction.cs" />
+    <Compile Include="actionai\RefreshDoT.cs" />
     <Compile Include="action\Action.cs" />
     <Compile Include="action\DoT.cs" />
     <Compile Include="action\IAbility.cs" />

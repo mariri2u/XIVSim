@@ -13,6 +13,7 @@ namespace xivsim.actionai
         public Action Action { get; set; }
         public BattleData Data { get; set; }
 
+        // 実行の可否をAIが判断する (アクションの実行可否は判断済みとする)
         public abstract bool IsAction();
     }
 }

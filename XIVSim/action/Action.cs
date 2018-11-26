@@ -36,7 +36,13 @@ namespace xivsim.action
             this.AI = ai;
         }
 
-        public abstract IAction Calc();
+        public virtual bool CanAction()
+        {
+            if (Data.Recast["cast"] < eps && Data.Recast["motion"] < eps) { return true; }
+            else { return false; } 
+        }
+
+        public abstract IAction CalcAction();
 
         public static Dictionary<string, IAction> ListToMap(List<IAction> list)
         {
