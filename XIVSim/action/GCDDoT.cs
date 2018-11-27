@@ -5,10 +5,10 @@ using xivsim.actionai;
 
 namespace xivsim.action
 {
-    class GCDDoT : DoT
+    class GCDDoT : DoT, IGCD
     {
         public GCDDoT(string name, int power, double cast, double recast, int slip, int duration) :
-            base(name, power, cast, recast, slip, duration, new RefreshDoT())
+            base(name, power, cast, recast, slip, duration)
         { }
 
         public override bool CanAction()

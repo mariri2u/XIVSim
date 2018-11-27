@@ -4,12 +4,10 @@ using System.Text;
 
 namespace xivsim.action
 {
-    public interface IDoT : IAction
+    public interface IBuff
     {
-        void Tick();
-
         double Remain { get; set; }
-        int Slip { get; }
+        double Amplifier { get; }
         int Duration { get; }
     }
 }

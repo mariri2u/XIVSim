@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
+using xivsim.actionai;
 
 namespace xivsim.jobai
 {
@@ -42,6 +43,7 @@ namespace xivsim.jobai
         {
             this.delta = delta;
             this.frame = 0;
+            this.time = 0.0;
             this.fps = (int)(1 / delta);
             this.data = new BattleData();
             logs = new Logger(fname);
@@ -56,22 +58,26 @@ namespace xivsim.jobai
             data.Table = this.CreateTable();
             actions = this.CreateActions();
 
-            this.time = 0.0;
+            time = 0.0;
+            frame = 0;
             totalDmg = 0.0;
 
             data.Clear();
-
-            used = null;
-
             data.Recast["global"] = 0.0;
             data.Recast["cast"] = 0.0;
             data.Recast["motion"] = 0.0;
             data.Recast["dot"] = dotTick;
 
+            used = null;
+
             foreach (IAction act in actions.Values)
             {
                 act.Data = data;
-                act.AI.Data = data;
+                foreach (ActionAI ai in act.AI)
+                {
+                    ai.Data = this.Data;
+                }
+
                 if (act is IAbility)
                 {
                     data.Recast[act.Name] = 0.0;

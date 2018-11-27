@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
+using xivsim.actionai;
 
 namespace xivsim.jobai
 {
@@ -24,10 +25,10 @@ namespace xivsim.jobai
             double cast = 2.41;
 
             List<IAction> actions = new List<IAction>();
-            actions.Add(new GCDAction("ストンジャ", 250, cast, gcd));
-            actions.Add(new GCDDoT("エアロラ", 50, 0.0, gcd, 50, 18));
-            actions.Add(new GCDDoT("エアロガ", 50, cast, gcd, 40, 24));
-            actions.Add(new Ability("アサイズ", 300, 60));
+            actions.Add(new GCDAction("ストンジャ", 250, cast, gcd).ResistAI(new AlwaysAction()));
+            actions.Add(new GCDDoT("エアロラ", 50, 0.0, gcd, 50, 18).ResistAI(new RefreshDoT()));
+            actions.Add(new GCDDoT("エアロガ", 50, cast, gcd, 40, 24).ResistAI(new RefreshDoT()));
+            actions.Add(new Ability("アサイズ", 300, 60).ResistAI(new NoInterrupt()));
 
             return Action.ListToMap(actions);
         }
@@ -37,7 +38,7 @@ namespace xivsim.jobai
             // GCD: DoT更新する場合
             foreach (IAction act in actions.Values)
             {
-                if (act is GCDDoT dot && act.CanAction() && act.AI.IsAction())
+                if (act is GCDDoT dot && act.CanAction() && act.IsActionByAI())
                 {
                     used = act.CalcAction();
                     return;
@@ -47,7 +48,7 @@ namespace xivsim.jobai
             // GCD: DoT更新が不要な場合
             foreach (IAction act in actions.Values)
             {
-                if (act is GCDAction && act.CanAction() && act.AI.IsAction())
+                if (act is GCDAction && act.CanAction() && act.IsActionByAI())
                 {
                     used = act.CalcAction();
                     return;
@@ -57,7 +58,7 @@ namespace xivsim.jobai
             // アビリティ (GCDアクションを行わない場合)
             foreach (IAction act in actions.Values)
             {
-                if (act is IAbility && act.CanAction() && act.AI.IsAction())
+                if (act is IAbility && act.CanAction() && act.IsActionByAI())
                 {
                     used = act.CalcAction();
                     return;

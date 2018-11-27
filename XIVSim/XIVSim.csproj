@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actionai\NoInterruptGCD.cs" />
+    <Compile Include="actionai\NoInterrupt.cs" />
     <Compile Include="actionai\ActionAI.cs" />
     <Compile Include="actionai\AlwaysAction.cs" />
     <Compile Include="actionai\RefreshDoT.cs" />
@@ -49,9 +49,12 @@
     <Compile Include="action\IAbility.cs" />
     <Compile Include="action\IAction.cs" />
     <Compile Include="action\Ability.cs" />
+    <Compile Include="action\IBuff.cs" />
     <Compile Include="action\IDoT.cs" />
     <Compile Include="action\GCDDoT.cs" />
     <Compile Include="action\GCDAction.cs" />
+    <Compile Include="action\IGCD.cs" />
+    <Compile Include="action\IStack.cs" />
     <Compile Include="jobai\AstAI.cs" />
     <Compile Include="jobai\WhmAI.cs" />
     <Compile Include="BattleData.cs" />

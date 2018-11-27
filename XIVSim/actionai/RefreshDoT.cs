@@ -9,7 +9,7 @@ namespace xivsim.actionai
     {
         public override bool IsAction()
         {
-            if (Action is DoT dot)
+            if (Action is IDoT dot)
             {
                 return (dot.Remain < dot.Cast + dot.Recast);
             }

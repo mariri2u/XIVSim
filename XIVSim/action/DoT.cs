@@ -15,8 +15,8 @@ namespace xivsim.action
 
         public double Remain { get; set; }
 
-        public DoT(string name, int power, double cast, double recast, int slip, int duration, ActionAI ai)
-            : base(name, power, cast, recast, 0.1, ai)
+        public DoT(string name, int power, double cast, double recast, int slip, int duration)
+            : base(name, power, cast, recast, 0.1)
         {
             this.slip = slip;
             this.duration = duration;

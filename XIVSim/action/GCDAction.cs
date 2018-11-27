@@ -6,10 +6,10 @@ using xivsim.actionai;
 
 namespace xivsim.action
 {
-    class GCDAction : Action
+    class GCDAction : Action, IGCD
     {
         public GCDAction(string name, int power, double cast, double recast)
-            : base(name, power, cast, recast, 0.1, new AlwaysAction())
+            : base(name, power, cast, recast, 0.1)
         { }
 
         public override bool CanAction()

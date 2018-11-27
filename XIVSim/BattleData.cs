@@ -19,7 +19,7 @@ namespace xivsim
             damage = new Dictionary<string, double>();
             history = new LinkedList<IAction>();
         }
-
+        
         public void Clear()
         {
             recast.Clear();

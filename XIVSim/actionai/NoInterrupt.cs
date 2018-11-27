@@ -5,7 +5,7 @@ using xivsim.action;
 
 namespace xivsim.actionai
 {
-    public class NoInterruptGCD : ActionAI
+    public class NoInterrupt : ActionAI
     {
         public override bool IsAction()
         {

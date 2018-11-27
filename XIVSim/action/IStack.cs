@@ -4,12 +4,10 @@ using System.Text;
 
 namespace xivsim.action
 {
-    public interface IDoT : IAction
+    interface IStack
     {
-        void Tick();
-
         double Remain { get; set; }
-        int Slip { get; }
+        int StackedValue { get; set; }
         int Duration { get; }
     }
 }
