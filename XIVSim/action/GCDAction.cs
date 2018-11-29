@@ -20,11 +20,7 @@ namespace xivsim.action
 
         public override IAction CalcAction()
         {
-            Data.Damage["action"] = Data.Table.Calc(this.Power);
-            Data.Recast["cast"] = Cast;
-            Data.Recast["motion"] = Motion;
             Data.Recast["global"] = Recast;
-            Data.History.AddFirst(this);
 
             return this;
         }

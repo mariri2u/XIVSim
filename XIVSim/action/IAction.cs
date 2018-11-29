@@ -26,6 +26,6 @@ namespace xivsim.action
         bool IsActionByAI();
 
         // アクションを実行する (アクションの実行可否は判断済みとする)
-        IAction CalcAction();
+        IAction UseAction();
     }
 }

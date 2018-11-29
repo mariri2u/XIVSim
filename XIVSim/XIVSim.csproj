@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="actionai\NoInterrupt.cs" />
     <Compile Include="actionai\ActionAI.cs" />
-    <Compile Include="actionai\AlwaysAction.cs" />
+    <Compile Include="actionai\NoWait.cs" />
     <Compile Include="actionai\RefreshDoT.cs" />
     <Compile Include="action\Action.cs" />
     <Compile Include="action\DoT.cs" />

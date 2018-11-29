@@ -58,6 +58,23 @@ namespace xivsim.action
             return result;
         }
 
+        public IAction UseAction()
+        {
+            IAction act = CalcAction();
+            
+            // ダメージがある場合
+            if (act.Power > 0)
+            {
+                Data.Damage["action"] = Data.Table.Calc(Power);
+            }               
+
+            Data.Recast["cast"] = act.Cast;
+            Data.Recast["motion"] = act.Motion;
+            Data.History.AddFirst(act);
+            return act;
+        }
+
+        // リキャストの設定はこの中で実施
         public abstract IAction CalcAction();
 
         public static Dictionary<string, IAction> ListToMap(List<IAction> list)

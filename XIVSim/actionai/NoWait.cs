@@ -5,7 +5,7 @@ using xivsim.action;
 
 namespace xivsim.actionai
 {
-    public class AlwaysAction : ActionAI
+    public class NoWait : ActionAI
     {
         public override bool IsAction()
         {

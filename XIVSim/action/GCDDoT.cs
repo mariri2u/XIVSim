@@ -21,16 +21,7 @@ namespace xivsim.action
         {
             Data.DoTs[Name] = this;
             Remain = Duration;
-            Data.Recast["cast"] = Cast;
-            Data.Recast["motion"] = Motion;
             Data.Recast["global"] = Recast;
-
-            // 着弾ダメージがある場合
-            if (this.Power > eps)
-            {
-                Data.Damage["action"] = Data.Table.Calc(Power);
-            }
-            Data.History.AddFirst(this);
 
             return this;
         }

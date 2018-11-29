@@ -25,7 +25,7 @@ namespace xivsim.jobai
             double cast = 1.47;
 
             List<IAction> actions = new List<IAction>();
-            actions.Add(new GCDAction("マレフィガ", 220, cast, gcd).ResistAI(new AlwaysAction()));
+            actions.Add(new GCDAction("マレフィガ", 220, cast, gcd).ResistAI(new NoWait()));
             actions.Add(new GCDDoT("コンバラ", 0, 0.0, gcd, 50, 30).ResistAI(new RefreshDoT()));
             actions.Add(new Ability("クラウンロード", 300, 90).ResistAI(new NoInterrupt()));
             actions.Add(new Ability("アーサリースター", 200, 60).ResistAI(new NoInterrupt()));
@@ -40,7 +40,7 @@ namespace xivsim.jobai
             {
                 if (act is GCDDoT dot && act.CanAction() && act.IsActionByAI())
                 {
-                    used = act.CalcAction();
+                    used = act.UseAction();
                     return;
                 }
             }
@@ -50,7 +50,7 @@ namespace xivsim.jobai
             {
                 if (act is GCDAction && act.CanAction() && act.IsActionByAI())
                 {
-                    used = act.CalcAction();
+                    used = act.UseAction();
                     return;
                 }
             }
@@ -60,7 +60,7 @@ namespace xivsim.jobai
             {
                 if (act is IAbility && act.CanAction() && act.IsActionByAI())
                 {
-                    used = act.CalcAction();
+                    used = act.UseAction();
                     return;
                 }
             }            
