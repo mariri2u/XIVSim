@@ -30,7 +30,7 @@ namespace xivsim
             keys = new List<string>();
             logs = new Dictionary<string, Log>();
             dumping = false;
-            fp = new StreamWriter(fname, false, System.Text.Encoding.GetEncoding("shift_jis"));
+            fp = new StreamWriter(fname, false, new UTF8Encoding(true));
         }
 
         public void AddText(string key, string value)

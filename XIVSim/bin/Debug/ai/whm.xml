@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action name="エアロガ">
+      <AI class="Update" remain="4"/>
+    </Action>
+    <Action name="エアロラ">
+      <AI class="Update" remain="2"/>
+    </Action>
+    <Action name="ストンジャ">
+      <AI class="NoWait" />
+    </Action>
+    <Action name="アサイズ">
+      <AI class="NoInterrupt"/>
+    </Action>
+  </Actions>
+</ActionAI>

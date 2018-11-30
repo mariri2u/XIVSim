@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
 using xivsim.actionai;
+using xivsim.config;
 
-namespace xivsim.jobai
+namespace xivsim
 {
-    public abstract class JobAI
+    public class BattleManager
     {
         protected const double eps = 1.0e-7;
 
@@ -18,28 +19,39 @@ namespace xivsim.jobai
         private int fps;
         private double totalDmg;
 
-        protected Dictionary<string, IAction> actions;
+        protected List<Action> actions;
 
         private Logger logs;
 
         protected BattleData data;
 
-        protected IAction used;
+        protected Action used;
 
         public BattleData Data
         {
             get { return data; }
         }
 
-        public IAction Used
+        public Action Used
         {
             get { return used; }
         }
 
-        protected abstract DamageTable CreateTable();
-        protected abstract Dictionary<string, IAction> CreateActions();
+        protected void ConstructActionAndAI(List<Action> acts, Dictionary<string,List<ActionAI>> ais)
+        {
+            Dictionary<string, Action> actmap = Action.ListToMap(acts);
 
-        public JobAI(double delta, string fname)
+            // AIで定義された順にActionをソートしてAIをActionに登録する
+            acts.Clear();
+            foreach (string key in ais.Keys)
+            {
+                Action act = actmap[key];
+                act.ResistAI(ais[key]);
+                acts.Add(act);
+            }
+        }
+
+        public BattleManager(double delta, string fname)
         {
             this.delta = delta;
             this.frame = 0;
@@ -49,14 +61,12 @@ namespace xivsim.jobai
             logs = new Logger(fname);
         }
 
-        protected abstract void PreInit();
-
-        public void Init()
+        public void Init(string actfile, string aifile)
         {
-            PreInit();
-
-            data.Table = this.CreateTable();
-            actions = this.CreateActions();
+            data.Table = new DamageTable();
+            actions = this.CreateAction(actfile);
+            Dictionary<string, List<ActionAI>> ais = this.CreateActionAI(aifile);
+            ConstructActionAndAI(actions, ais);
 
             time = 0.0;
             frame = 0;
@@ -70,7 +80,7 @@ namespace xivsim.jobai
 
             used = null;
 
-            foreach (IAction act in actions.Values)
+            foreach (Action act in actions)
             {
                 act.Data = data;
                 foreach (ActionAI ai in act.AI)
@@ -82,22 +92,65 @@ namespace xivsim.jobai
                 {
                     data.Recast[act.Name] = 0.0;
                 }
-                else if (act is IDoT dot)
+
+                if (act.Slip > 0)
                 {
-                    data.DoTs[act.Name] = dot;
+                    data.DoTs[act.Name] = act;
                 }
             }
-
-            PostInit();
         }
 
-        protected abstract void PostInit();
+        private List<Action> CreateAction(string fname)
+        {
+            ActionConfig config = ActionConfig.Load(fname);
+            List<Action> actions = null;
+            if (config == null)
+            {
+                double gcd = 2.45;
+                double cast = 1.47;
+                actions = new List<Action>();
+                actions.Add(new GCDAction("マレフィガ", 220, cast, gcd));
+                actions.Add(new GCDAction("コンバラ", 0, 0.0, gcd, 50, 30));
+                actions.Add(new Ability("クラウンロード", 300, 90));
+                config = new ActionConfig();
+                config.AddAll(actions);
+                config.Save(fname);
+            }
+            else
+            {
+                actions = config.GetAll();
+            }
+
+            return actions;
+        }
+
+        private Dictionary<string, List<ActionAI>> CreateActionAI(string fname)
+        {
+            AIConfig config = AIConfig.Load(fname);
+            if (config == null)
+            {
+                config = new AIConfig();
+                config.Add("マレフィガ", new NoWait());
+                config.Add("コンバラ", new Update());
+                config.Add("クラウンロード", new NoInterrupt());
+                config.Save(fname);
+            }
+
+            Dictionary<string, List<ActionAI>> ais = new Dictionary<string, List<ActionAI>>();
+
+            foreach (AIPair pair in config.List)
+            {
+                ais[pair.Action] = config.Get(pair.Action);
+            }
+
+            return ais;
+        }
 
         public void Step()
         {
             InitStep();
             DoTTick();
-            AIAction();
+            ActionDamage();
             MergeDamage();
             Dump();
             StepToNext();
@@ -125,7 +178,7 @@ namespace xivsim.jobai
         {
             if (data.Recast["dot"] < eps)
             {
-                foreach (IDoT dot in data.DoTs.Values)
+                foreach (Action dot in data.DoTs.Values)
                 {
                     dot.Tick();
                 }
@@ -134,8 +187,26 @@ namespace xivsim.jobai
             }
         }
 
-        // 個々のAIが判断して行動する
-        protected abstract void AIAction();
+        private void ActionDamage()
+        {
+            if (Data.Casting == null)
+            {
+                foreach (Action act in actions)
+                {
+                    if (act.CanAction() && act.IsActionByAI())
+                    {
+                        used = act.UseAction();
+                    }
+                }
+            }
+            else
+            {
+                if (Data.Recast["cast"] < eps)
+                {
+                    used = Data.Casting.DoneCast();
+                }
+            }
+        }
 
         // DoTのダメージとAIの行動結果をマージする
         private void MergeDamage()
@@ -187,7 +258,7 @@ namespace xivsim.jobai
             logs.AddDouble("dps", dps);
 
             // 何らかの状態に変化があった場合のみダンプする
-            if (dmg > eps || used != null)
+            if (frame % fps == 0 || dmg > eps || used != null)
             {
                 logs.Dump();
             }

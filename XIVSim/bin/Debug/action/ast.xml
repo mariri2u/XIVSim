@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action class="GCDAction" name="マレフィガ" power="220" cast="1.47" recast="2.45" />
+    <Action class="GCDAction" name="コンバラ" slip="50" duration="30" recast="2.45" />
+    <Action class="Ability" name="クラウンロード" power="300" recast="90" motion="0.8" />
+    <Action class="Ability" name="アーサリースター" power="200" recast="60" motion="0.8" />
+  </Actions>
+</ActionList>

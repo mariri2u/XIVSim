@@ -7,8 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-using xivsim.jobai;
-
 namespace xivsim
 {
     public partial class Form1 : Form
@@ -23,8 +21,8 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            JobAI ai = new WhmAI(delta);
-            ai.Init();
+            BattleManager ai = new BattleManager(delta, @"whm_combat.csv");
+            ai.Init(@"action/whm.xml", @"ai/whm.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {
@@ -39,8 +37,8 @@ namespace xivsim
             // 初期化
             double delta = 0.01;
 
-            JobAI ai = new AstAI(delta);
-            ai.Init();
+            BattleManager ai = new BattleManager(delta, @"ast_combat.csv");
+            ai.Init(@"action/ast.xml", @"ai/ast.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {

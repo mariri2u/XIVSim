@@ -40,25 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="actionai\NoInterrupt.cs" />
-    <Compile Include="actionai\ActionAI.cs" />
-    <Compile Include="actionai\NoWait.cs" />
-    <Compile Include="actionai\RefreshDoT.cs" />
+    <Compile Include="config\AIElement.cs" />
+    <Compile Include="config\AIPair.cs" />
+    <Compile Include="config\AIConfig.cs" />
+    <Compile Include="ai\NoInterrupt.cs" />
+    <Compile Include="ai\ActionAI.cs" />
+    <Compile Include="ai\NoWait.cs" />
+    <Compile Include="ai\Update.cs" />
     <Compile Include="action\Action.cs" />
-    <Compile Include="action\DoT.cs" />
     <Compile Include="action\IAbility.cs" />
-    <Compile Include="action\IAction.cs" />
     <Compile Include="action\Ability.cs" />
-    <Compile Include="action\IBuff.cs" />
-    <Compile Include="action\IDoT.cs" />
-    <Compile Include="action\GCDDoT.cs" />
     <Compile Include="action\GCDAction.cs" />
     <Compile Include="action\IGCD.cs" />
-    <Compile Include="action\IStack.cs" />
-    <Compile Include="jobai\AstAI.cs" />
-    <Compile Include="jobai\WhmAI.cs" />
+    <Compile Include="config\ActionConfig.cs" />
+    <Compile Include="config\ActionElement.cs" />
     <Compile Include="BattleData.cs" />
-    <Compile Include="jobai\JobAI.cs" />
+    <Compile Include="BattleManager.cs" />
     <Compile Include="DamageTable.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

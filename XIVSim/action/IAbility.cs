@@ -4,7 +4,7 @@ using System.Text;
 
 namespace xivsim.action
 {
-    public interface IAbility : IAction
+    public interface IAbility
     {
     }
 }

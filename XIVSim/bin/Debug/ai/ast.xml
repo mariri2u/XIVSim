@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action name="コンバラ">
+      <AI class="Update" remain="2" />
+    </Action>
+    <Action name="マレフィガ">
+      <AI class="NoWait" />
+    </Action>
+    <Action name="クラウンロード">
+      <AI class="NoInterrupt" />
+    </Action>
+    <Action name="アーサリースター">
+      <AI class="NoInterrupt" />
+    </Action>
+  </Actions>
+</ActionAI>

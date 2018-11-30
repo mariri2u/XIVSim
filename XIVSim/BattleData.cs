@@ -7,35 +7,32 @@ namespace xivsim
 {
     public class BattleData
     {
-        private Dictionary<string, double> recast;
-        private Dictionary<string, IDoT> dots;
-        private Dictionary<string, double> damage;
-        private LinkedList<IAction> history;
-        private LinkedList<IAction> reserve;
-
         public BattleData()
         {
-            recast = new Dictionary<string, double>();
-            dots = new Dictionary<string, IDoT>();
-            damage = new Dictionary<string, double>();
-            history = new LinkedList<IAction>();
-            reserve = new LinkedList<IAction>();
+            Recast = new Dictionary<string, double>();
+            Damage = new Dictionary<string, double>();
+            DoTs = new Dictionary<string, Action>();
+            Casting = null;
+            History = new List<Action>();
+            Reserve = new List<Action>();
         }
         
         public void Clear()
         {
-            recast.Clear();
-            dots.Clear();
-            damage.Clear();
-            history.Clear();
-            reserve.Clear();
+            Recast.Clear();
+            DoTs.Clear();
+            Damage.Clear();
+            Casting = null;
+            History.Clear();
+            Reserve.Clear();
         }
 
-        public Dictionary<string, double> Recast { get { return recast; } }
-        public Dictionary<string, IDoT> DoTs { get { return dots; } }
-        public Dictionary<string, double> Damage { get { return damage; } }
-        public LinkedList<IAction> History { get { return history; } }
-        public LinkedList<IAction> Reserve { get { return reserve; } }
+        public Dictionary<string, double> Recast { get; }
+        public Dictionary<string, double> Damage { get; }
+        public Dictionary<string, Action> DoTs { get; }
+        public Action Casting { get; set; }
+        public List<Action> History { get; }
+        public List<Action> Reserve { get; }
         public DamageTable Table { get; set; }
     }
 }
