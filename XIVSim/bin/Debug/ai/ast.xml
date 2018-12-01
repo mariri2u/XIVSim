@@ -13,5 +13,9 @@
     <Action name="アーサリースター">
       <AI class="NoInterrupt" />
     </Action>
+    <Action name="クルセードスタンス">
+      <AI class="NoInterrupt" />
+      <AI class="LessRemain" relation="コンバラ" remain="5" />
+    </Action>
   </Actions>
 </ActionAI>

@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action name="彼岸花">
+      <AI class="MoreStack" relation="必殺剣・回天" stack="1" />
+    </Action>
+    <Action name="乱れ雪月花">
+      <AI class="MoreStack" relation="必殺剣・回天" stack="1" />
+    </Action>
+    <Action name="月光">
+      <AI group="combo" class="Before" relation="陣風" />
+      <AI group="mei" class="MoreStack" relation="明鏡止水" stack="1" />
+      <AI group="mei" class="LessStack" relation="月の閃" stack="0" />
+    </Action>
+    <Action name="花車">
+      <AI group="combo" class="Before" relation="士風" />
+      <AI group="mei" class="MoreStack" relation="明鏡止水" stack="1" />
+      <AI group="mei" class="LessStack" relation="花の閃" stack="0" />
+    </Action>
+    <Action name="陣風">
+      <AI group="update" class="Update" remain="10"/>
+      <AI group="combo" class="LessStack" relation="月の閃" stack="0" />
+    </Action>
+    <Action name="士風">
+      <AI group="update" class="Update" remain="10"/>
+      <AI group="combo" class="LessStack" relation="花の閃" stack="0" />
+    </Action>
+    <Action name="雪風">
+      <AI group="update" class="Update" remain="10"/>
+      <AI group="combo" class="LessStack" relation="雪の閃" stack="0" />
+    </Action>
+    <Action name="刃風">
+      <AI class="NoWait" />
+    </Action>
+    <Action name="必殺剣・回天">
+      <AI class="NoInterrupt" />
+      <AI class="MoreRemain" relation="陣風" remain="6" />
+      <AI class="MoreRemain" relation="士風" remain="6" />
+      <AI group="dot" class="EqualStack" relation="閃" stack="1" />
+      <AI group="dot" class="LessRemain" relation="彼岸花" remain="10" />
+      <AI group="sword" class="EqualStack" relation="閃" stack="3" />
+      <AI group="sword" class="MoreRecast" relation="葉隠" recast="0" />
+    </Action>
+    <Action name="葉隠">
+      <AI class="NoInterrupt" />
+      <AI class="MoreStack" relation="閃" stack="3" />
+      <AI class="LessStack" relation="剣気" stack="40" />
+    </Action>
+    <Action name="明鏡止水">
+      <AI class="NoInterrupt" />
+      <AI class="MoreRemain" relation="陣風" remain="10" />
+      <AI class="MoreRemain" relation="士風" remain="10" />
+      <AI group="tsuki" class="Before" relation="月光" />
+      <AI group="hana" class="Before" relation="花車" />
+      <AI group="yuki" class="Before" relation="雪風" />
+    </Action>
+    <Action name="必殺剣・紅蓮">
+      <AI class="NoInterrupt" />
+    </Action>
+    <Action name="必殺剣・震天">
+      <AI class="NoInterrupt" />
+      <AI group="standard" class="MoreStack" relation="剣気" stack="50" />
+      <AI group="hagakure" class="LessRecast" relation="葉隠" recast="5" />
+    </Action>
+  </Actions>
+</ActionAI>

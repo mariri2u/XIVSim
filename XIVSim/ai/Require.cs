@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class NoWait : AI
+    public class Require : AI
     {
         public override bool IsAction()
         {
-            return true;
+            return Data.State[relation].Duration < eps || Data.State[relation].Remain > eps;
         }
     }
 }

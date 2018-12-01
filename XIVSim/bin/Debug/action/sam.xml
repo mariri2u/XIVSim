@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action class="AutoAttack" name="オートアタック" power="100" />
+    <Action class="GCDAction" name="刃風" power="150" relation="剣気" increase="5" />
+    <Action class="SamCombo" name="陣風" power="300" duration="30" amplifier="1.1" relation="剣気" increase="5" before="刃風" relationA="明鏡止水" />
+    <Action class="SamCombo" name="士風" power="300" duration="30" haste="0.9" relation="剣気" increase="5" before="刃風" relationA="明鏡止水" />
+    <Action class="SamCombo" name="月光" power="440" relation="剣気" increase="10" before="陣風" relationA="明鏡止水" relationB="月の閃" />
+    <Action class="SamCombo" name="花車" power="440"  relation="剣気" increase="10" before="士風" relationA="明鏡止水" relationB="花の閃" />
+    <Action class="SamCombo" name="雪風" power="380" duration="30" amplifier="1.1" relation="剣気" increase="10" before="刃風" relationA="明鏡止水" relationB="雪の閃" />
+    <Action class="SamSword" name="彼岸花" power="240" slip="35" duration="60" cast="0.7" relation="閃" require="1" combo="false" />
+    <Action class="SamSword" name="乱れ雪月花" power="720" cast="0.7" relation="閃" require="3" combo="false" />
+    <Action class="Ability" name="必殺剣・震天" power="300" recast="1" relation="剣気" require="25" />
+    <Action class="Ability" name="必殺剣・紅蓮" power="800" recast="120" relation="剣気" require="50" />
+    <Action class="Hagakure" name="葉隠" recast="40" relation="剣気" increase="20" relationA="月の閃" relationB="花の閃" relationC="雪の閃" />
+    <Action class="Ability" name="明鏡止水" recast="80" duration="10" relation="明鏡止水" increase="3" max="3" />
+    <Action class="AmpGCD" name="必殺剣・回天" recast="5" duration="10" amplifier="1.5" relation="剣気" require="20" max="1" />
+    <Action class="NoAction" name="月の閃" max="1" />
+    <Action class="NoAction" name="花の閃" max="1" />
+    <Action class="NoAction" name="雪の閃" max="1" />
+    <Action class="SamStack" name="閃" max="3" relationA="月の閃" relationB="花の閃" relationC="雪の閃" />
+    <Action class="NoAction" name="剣気" max="100" />
+  </Actions>
+</ActionList>

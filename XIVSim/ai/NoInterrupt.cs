@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
 
-namespace xivsim.actionai
+namespace xivsim.ai
 {
-    public class NoInterrupt : ActionAI
+    public class NoInterrupt : AI
     {
         public override bool IsAction()
         {

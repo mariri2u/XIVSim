@@ -13,5 +13,8 @@
     <Action name="アサイズ">
       <AI class="NoInterrupt"/>
     </Action>
+    <Action name="クルセードスタンス">
+      <AI class="NoInterrupt"/>
+    </Action>
   </Actions>
 </ActionAI>

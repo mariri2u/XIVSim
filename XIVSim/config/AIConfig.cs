@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
-using xivsim.actionai;
+using xivsim.ai;
 
 namespace xivsim.config
 {
@@ -19,7 +19,7 @@ namespace xivsim.config
             List = new List<AIPair>();
         }
 
-        public void Add(string key, ActionAI ai)
+        public void Add(string key, AI ai)
         {
             AIPair pair = null;
             foreach(AIPair p in List)
@@ -44,7 +44,7 @@ namespace xivsim.config
             pair.AI.Add(elm);
         }
 
-        public List<ActionAI> Get(string key)
+        public List<AI> Get(string key)
         {
             List<AIElement> aicfg = null;
             foreach(AIPair pair in List)
@@ -61,11 +61,12 @@ namespace xivsim.config
                 aicfg = new List<AIElement>();
             }
 
-            List<ActionAI> ais = new List<ActionAI>();
+            List<AI> ais = new List<AI>();
             foreach(AIElement elm in aicfg)
             {
-                Type type = Type.GetType("xivsim.actionai." + elm.Class);
-                ActionAI ai = (ActionAI)Activator.CreateInstance(type);
+                Type type = Type.GetType("xivsim.ai." + elm.Class);
+                AI ai = (AI)Activator.CreateInstance(type);
+                ai.Name = key;
                 ai.LoadConfig(elm);
                 ais.Add(ai);
             }

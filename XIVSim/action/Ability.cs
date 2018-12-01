@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.actionai;
+using xivsim.ai;
 
 namespace xivsim.action
 {
-    class Ability : Action, IAbility
+    public class Ability : Action, IAbility
     {
         public Ability() : base() { }
 
@@ -19,11 +19,9 @@ namespace xivsim.action
             else { return false; }
         }
 
-        public override Action CalcAction()
+        public override void CalcAction()
         {
             Data.Recast[Name] = Recast;
-
-            return this;
         }
     }
 }

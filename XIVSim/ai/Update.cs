@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.action;
 
-namespace xivsim.actionai
+namespace xivsim.ai
 {
-    public class Update : ActionAI
+    public class Update : AI
     {
         public override bool IsAction()
         {
-            return (Action.Remain < this.remain);
+            return (Data.State[Action.Name].Remain <= remain);
         }
     }
 }

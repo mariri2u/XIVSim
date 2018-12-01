@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using xivsim.actionai;
+using xivsim.ai;
 
 namespace xivsim.action
 {
-    class GCDAction : Action, IGCD
+    public class GCDAction : Action, IGCD
     {
         public GCDAction() : base() { }
+
+        public void ApplyGlobal(double gcd)
+        {
+            recast = gcd;
+            cast *= gcd;
+            motion = 0.1;
+        }
 
         public GCDAction(string name, int power, double cast, double recast)
             : base(name, power, cast, recast, 0.1)
@@ -23,11 +30,10 @@ namespace xivsim.action
             else { return false; }
         }
 
-        public override Action CalcAction()
+        public override void CalcAction()
         {
-            Data.Recast["global"] = Recast - Cast;
-
-            return this;
+            Data.Recast["global"] = Data.GetHaste() * (Recast - Cast);
+            if (combo) { Data.Before = this; }
         }
     }
 }

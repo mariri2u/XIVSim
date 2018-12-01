@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ActionList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Actions>
-    <Action class="GCDAction" name="ストンジャ" power="250" cast="2.41" recast="2.41" />
-    <Action class="GCDAction" name="エアロラ" power="50" slip="50" duration="18" recast="2.41" />
-    <Action class="GCDAction" name="エアロガ" power="50" slip="40" duration="24" cast="2.41" recast="2.41" />
-    <Action class="Ability" name="アサイズ" power="300" recast="60" motion="0.8" />
+    <Action class="GCDAction" name="ストンジャ" power="250" cast="1.0" />
+    <Action class="GCDAction" name="エアロラ" power="50" slip="50" duration="18" />
+    <Action class="GCDAction" name="エアロガ" power="50" slip="40" duration="24" cast="1.0" />
+    <Action class="Ability" name="アサイズ" power="300" recast="60" />
+    <Action class="Ability" name="クルセードスタンス" amplifier="1.05" recast="90" duration="15" />
   </Actions>
 </ActionList>

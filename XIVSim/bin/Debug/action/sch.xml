@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Actions>
+    <Action class="GCDAction" name="魔炎法" power="230" cast="1.0" />
+    <Action class="GCDAction" name="ルインラ" power="100" />
+    <Action class="GCDAction" name="バイオラ" slip="35" duration="30" />
+    <Action class="GCDAction" name="ミアズマ" power="20" slip="35" duration="24" cast="1.0" />
+    <Action class="Ability" name="シャドウフレア" slip="50" duration="15" recast="60" />
+    <Action class="Ability" name="エナジードレイン" power="150" recast="3" relation="エーテルフロー" require="1" />
+    <Action class="Ability" name="エーテルフロー" recast="60" relation="エーテルフロー" increase="3" max="3" />
+    <Action class="Ability" name="連環計" amplifier="1.075" recast="120" duration="15" />
+    <Action class="Ability" name="クルセードスタンス" amplifier="1.05" recast="90" duration="15" />
+  </Actions>
+</ActionList>

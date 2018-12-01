@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using xivsim.action;
-using xivsim.actionai;
+using xivsim.ai;
 using xivsim.config;
 
 namespace xivsim
@@ -18,8 +18,6 @@ namespace xivsim
         private int frame;
         private int fps;
         private double totalDmg;
-
-        protected List<Action> actions;
 
         private Logger logs;
 
@@ -37,7 +35,7 @@ namespace xivsim
             get { return used; }
         }
 
-        protected void ConstructActionAndAI(List<Action> acts, Dictionary<string,List<ActionAI>> ais)
+        protected void ConstructActionAndAI(List<Action> acts, Dictionary<string,List<AI>> ais)
         {
             Dictionary<string, Action> actmap = Action.ListToMap(acts);
 
@@ -48,6 +46,24 @@ namespace xivsim
                 Action act = actmap[key];
                 act.ResistAI(ais[key]);
                 acts.Add(act);
+            }
+
+            // AIで定義されていないActionを登録
+            foreach (string key in actmap.Keys)
+            {
+                bool contain = false;
+                foreach (Action act in acts)
+                {
+                    if (act.Name == key)
+                    {
+                        contain = true;
+                        break;
+                    }
+                }
+                if (!contain)
+                {
+                    acts.Add(actmap[key]);
+                }
             }
         }
 
@@ -61,18 +77,19 @@ namespace xivsim
             logs = new Logger(fname);
         }
 
-        public void Init(string actfile, string aifile)
+        public void Init(double gcd, DamageTable table, string actfile, string aifile)
         {
-            data.Table = new DamageTable();
-            actions = this.CreateAction(actfile);
-            Dictionary<string, List<ActionAI>> ais = this.CreateActionAI(aifile);
-            ConstructActionAndAI(actions, ais);
+            data.Table = table;
+            data.Action = this.CreateAction(gcd, actfile);
+            Dictionary<string, List<AI>> ais = this.CreateAI(aifile);
+            ConstructActionAndAI(data.Action, ais);
 
             time = 0.0;
             frame = 0;
             totalDmg = 0.0;
 
             data.Clear();
+            data.Recast["aa"] = 0.0;
             data.Recast["global"] = 0.0;
             data.Recast["cast"] = 0.0;
             data.Recast["motion"] = 0.0;
@@ -80,10 +97,10 @@ namespace xivsim
 
             used = null;
 
-            foreach (Action act in actions)
+            foreach (Action act in data.Action)
             {
                 act.Data = data;
-                foreach (ActionAI ai in act.AI)
+                foreach (AI ai in act.AI)
                 {
                     ai.Data = this.Data;
                 }
@@ -93,24 +110,22 @@ namespace xivsim
                     data.Recast[act.Name] = 0.0;
                 }
 
-                if (act.Slip > 0)
+                if (act.Duration > 0 || act.Max > 0 || act.Amplifier > eps || act.Haste > eps)
                 {
-                    data.DoTs[act.Name] = act;
+                    data.State[act.Name] = act;
                 }
             }
         }
 
-        private List<Action> CreateAction(string fname)
+        private List<Action> CreateAction(double gcd, string fname)
         {
             ActionConfig config = ActionConfig.Load(fname);
             List<Action> actions = null;
             if (config == null)
             {
-                double gcd = 2.45;
-                double cast = 1.47;
                 actions = new List<Action>();
-                actions.Add(new GCDAction("マレフィガ", 220, cast, gcd));
-                actions.Add(new GCDAction("コンバラ", 0, 0.0, gcd, 50, 30));
+                actions.Add(new GCDAction("マレフィガ", 220, 0.6, 1.0));
+                actions.Add(new GCDAction("コンバラ", 0, 0.0, 1.0, 50, 30));
                 actions.Add(new Ability("クラウンロード", 300, 90));
                 config = new ActionConfig();
                 config.AddAll(actions);
@@ -121,22 +136,35 @@ namespace xivsim
                 actions = config.GetAll();
             }
 
+            // GCDアクションのリキャストと詠唱とモーションを書き換える
+            foreach(Action act in actions)
+            {
+                if(act is IGCD g)
+                {
+                    g.ApplyGlobal(gcd);
+                }
+                else if(act is AutoAttack aa)
+                {
+                    aa.ApplySpeed(gcd);
+                }
+            }
+
             return actions;
         }
 
-        private Dictionary<string, List<ActionAI>> CreateActionAI(string fname)
+        private Dictionary<string,List<AI>> CreateAI(string fname)
         {
             AIConfig config = AIConfig.Load(fname);
             if (config == null)
             {
                 config = new AIConfig();
                 config.Add("マレフィガ", new NoWait());
-                config.Add("コンバラ", new Update());
+                config.Add("コンバラ", new LessRemain());
                 config.Add("クラウンロード", new NoInterrupt());
                 config.Save(fname);
             }
 
-            Dictionary<string, List<ActionAI>> ais = new Dictionary<string, List<ActionAI>>();
+            Dictionary<string, List<AI>> ais = new Dictionary<string, List<AI>>();
 
             foreach (AIPair pair in config.List)
             {
@@ -149,7 +177,7 @@ namespace xivsim
         public void Step()
         {
             InitStep();
-            DoTTick();
+            Tick();
             ActionDamage();
             MergeDamage();
             Dump();
@@ -174,14 +202,17 @@ namespace xivsim
             data.Damage["action"] = 0.0;
         }
 
-        private void DoTTick()
+        private void Tick()
         {
+            foreach (Action state in data.State.Values)
+            {
+                if (state.Remain > eps)
+                {
+                    state.Tick();
+                }
+            }
             if (data.Recast["dot"] < eps)
             {
-                foreach (Action dot in data.DoTs.Values)
-                {
-                    dot.Tick();
-                }
                 // DoTTickを更新
                 data.Recast["dot"] = dotTick;
             }
@@ -191,11 +222,13 @@ namespace xivsim
         {
             if (Data.Casting == null)
             {
-                foreach (Action act in actions)
+                foreach (Action act in data.Action)
                 {
                     if (act.CanAction() && act.IsActionByAI())
                     {
-                        used = act.UseAction();
+                        used = act;
+                        act.UseAction();
+                        break;
                     }
                 }
             }
@@ -203,7 +236,8 @@ namespace xivsim
             {
                 if (Data.Recast["cast"] < eps)
                 {
-                    used = Data.Casting.DoneCast();
+                    used = Data.Casting;
+                    Data.Casting.DoneCast();
                 }
             }
         }
@@ -231,6 +265,18 @@ namespace xivsim
                 logs.AddText("action", "none");
             }
 
+            if (Data.Before != null)
+            {
+                logs.AddText("before", Data.Before.Name);
+            }
+            else
+            {
+                logs.AddText("before", "none");
+            }
+
+            logs.AddDouble("amplifier", Data.GetAmplifier());
+            logs.AddDouble("haste", Data.GetHaste());
+
             double dmg = 0.0;
             foreach( string key in data.Damage.Keys )
             {
@@ -239,11 +285,22 @@ namespace xivsim
             }
             logs.AddDouble("damage", dmg);
 
-            foreach (string key in data.DoTs.Keys)
+            foreach (string key in data.State.Keys)
             {
-                logs.AddDouble(key + ".remain", data.DoTs[key].Remain);
+                if (data.State[key].Duration > 0)
+                {
+                    logs.AddDouble(key + ".remain", data.State[key].Remain);
+                }
             }
 
+            foreach (string key in data.State.Keys)
+            {
+                if (data.State[key].Max > 0)
+                {
+                    logs.AddInt(key + ".stack", data.State[key].Stack);
+                }
+            }
+            
             foreach (string key in data.Recast.Keys)
             {
                 logs.AddDouble(key + ".recast", data.Recast[key]);
@@ -276,12 +333,18 @@ namespace xivsim
                 data.Recast[key] -= delta;
             }
 
-            keys = new List<string>(data.DoTs.Keys);
-            foreach( string key in keys )
+            keys = new List<string>(data.State.Keys);
+            foreach (string key in keys)
             {
-                data.DoTs[key].Remain -= delta;
-            }
+                data.State[key].Remain -= delta;
 
+                // Buffが切れたときの終了処理を実行
+                if (Data.State[key].Remain < eps && Data.State[key].Remain + eps > -delta)
+                {
+                    data.State[key].ExpireBuff();
+                }
+            }
+            
             frame++;
             time += delta;
         }

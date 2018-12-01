@@ -5,11 +5,11 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class NoWait : AI
+    public class MoreRecast : AI
     {
         public override bool IsAction()
         {
-            return true;
+            return Data.Recast[relation] >= recast;
         }
     }
 }

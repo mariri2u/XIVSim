@@ -6,5 +6,6 @@ namespace xivsim.action
 {
     interface IGCD
     {
+        void ApplyGlobal(double gcd);
     }
 }
