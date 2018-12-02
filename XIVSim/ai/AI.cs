@@ -16,16 +16,14 @@ namespace xivsim.ai
 
         protected string group;
         protected string relation;
-        protected double remain;
-        protected double recast;
-        protected int stack;
-        protected double amplifier;
+        protected double threshold_f;
+        protected int threshold_i;
 
         public string Group { get { return group; } }
 
         public AI()
         {
-            this.group = "default";
+            this.group = "common";
         }
 
         // 実行の可否をAIが判断する (アクションの実行可否は判断済みとする)
@@ -35,11 +33,9 @@ namespace xivsim.ai
         public void LoadConfig(AIElement arg)
         {
             this.group = arg.Group;
-            this.remain = arg.Remain;
-            this.recast = arg.Recast;
             this.relation = arg.Relation;
-            this.stack = arg.Stack;
-            this.amplifier = arg.Amplifier;
+            this.threshold_f = arg.Threshold;
+            this.threshold_i = (int)(arg.Threshold + eps);
         }
     }
 }

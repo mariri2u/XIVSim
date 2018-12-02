@@ -110,7 +110,7 @@ namespace xivsim
                     data.Recast[act.Name] = 0.0;
                 }
 
-                if (act.Duration > 0 || act.Max > 0 || act.Amplifier > eps || act.Haste > eps)
+                if (act.Duration > 0 || act.Max > 0 || act.Amp > eps || act.Haste > eps)
                 {
                     data.State[act.Name] = act;
                 }
@@ -227,7 +227,7 @@ namespace xivsim
                     if (act.CanAction() && act.IsActionByAI())
                     {
                         used = act;
-                        act.UseAction();
+                        act.StartAction();
                         break;
                     }
                 }
@@ -237,7 +237,7 @@ namespace xivsim
                 if (Data.Recast["cast"] < eps)
                 {
                     used = Data.Casting;
-                    Data.Casting.DoneCast();
+                    Data.Casting.DoneAction();
                 }
             }
         }
@@ -274,7 +274,12 @@ namespace xivsim
                 logs.AddText("before", "none");
             }
 
-            logs.AddDouble("amplifier", Data.GetAmplifier());
+            logs.AddDouble("pureamp", Data.GetPureAmp());
+            logs.AddDouble("critprob", Data.GetCritProb());
+            logs.AddDouble("critamp", Data.GetCritAmp());
+            logs.AddDouble("direcprob", Data.GetDirecProb());
+            logs.AddDouble("direcamp", Data.GetDirecAmp());
+            logs.AddDouble("amp", Data.GetAmp());
             logs.AddDouble("haste", Data.GetHaste());
 
             double dmg = 0.0;
@@ -336,17 +341,13 @@ namespace xivsim
             keys = new List<string>(data.State.Keys);
             foreach (string key in keys)
             {
-                data.State[key].Remain -= delta;
-
-                // Buffが切れたときの終了処理を実行
-                if (Data.State[key].Remain < eps && Data.State[key].Remain + eps > -delta)
-                {
-                    data.State[key].ExpireBuff();
-                }
+                Data.State[key].DoneStep();
+                Data.State[key].Remain -= delta;
             }
             
             frame++;
             time += delta;
+            Data.Time = time;
         }
     }
 }

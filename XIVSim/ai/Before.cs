@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using xivsim.action;
 
 namespace xivsim.ai
 {
@@ -8,7 +9,7 @@ namespace xivsim.ai
     {
         public override bool IsAction()
         {
-            return Data.Before.Name == relation;
+            return Data.Time <= threshold_i;
         }
     }
 }

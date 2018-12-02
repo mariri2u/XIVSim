@@ -4,22 +4,33 @@ using System.Text;
 
 namespace xivsim.action
 {
-    public class StackedBuff : Action
+    public class StackedBuff : NoAction
     {
-        public override double Amplifier
+        public override double Amp
         {
-            get {
-                return 1.0 + (amplifier - 1.0) * Stack / max;
+            get
+            {
+                if (base.Amp > eps) { return 1.0 + (base.Amp - 1.0) * Stack / Max; }
+                else { return 1.0; }
             }
         }
 
-        public override bool CanAction()
+        public override double Crit
         {
-            return false;
+            get
+            {
+                if (base.Crit > eps) { return 1.0 + (base.Crit - 1.0) * Stack / Max; }
+                else { return 1.0; }
+            }
         }
 
-        public override void CalcAction()
+        public override double Direc
         {
+            get
+            {
+                if (base.Direc > eps) { return 1.0 + (base.Direc - 1.0) * Stack / Max; }
+                else { return 1.0; }
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace xivsim.ai
     {
         public override bool IsAction()
         {
-            return Data.State[relation].Stack >= stack;
+            return Data.State[relation].Stack >= threshold_i;
         }
     }
 }

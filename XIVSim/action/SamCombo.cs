@@ -8,7 +8,7 @@ namespace xivsim.action
     {
         protected override bool InBefore()
         {
-            if (Data.State[RelationA].Remain > eps && Data.State[RelationA].Stack > 0) { return true; }
+            if (Data.State[RelationA].IsValid()) { return true; }
             else { return base.InBefore(); }
         }
 
@@ -16,7 +16,7 @@ namespace xivsim.action
         {
             base.CalcAction();
 
-            if(Data.State[RelationA].Remain > eps && Data.State[RelationA].Stack > 0)
+            if(Data.State[RelationA].IsValid())
             {
                 Data.State[RelationA].Stack--;
             }

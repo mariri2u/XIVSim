@@ -5,11 +5,11 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class RequireAmplifier : AI
+    public class MoreAmp : AI
     {
         public override bool IsAction()
         {
-            return Data.GetAmplifier() >= amplifier;
+            return Data.GetAmp() >= threshold_f;
         }
     }
 }

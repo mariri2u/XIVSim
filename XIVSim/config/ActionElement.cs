@@ -17,7 +17,7 @@ namespace xivsim.config
             Cast = 0;
             Recast = 0;
             Motion = 0.8;
-            Amplifier = 0.0;
+            Amp = 0.0;
             Duration = 0;
             Relation = null;
             RelationA = null;
@@ -28,6 +28,8 @@ namespace xivsim.config
             Before = null;
             Haste = 0.0;
             Combo = true;
+            Crit = 0.0;
+            Direc = 0.0;
         }
 
         [XmlAttribute("class")]
@@ -51,8 +53,8 @@ namespace xivsim.config
         [XmlAttribute("motion")]
         public double Motion { get; set; }
 
-        [XmlAttribute("amplifier")]
-        public double Amplifier { get; set; }
+        [XmlAttribute("amp")]
+        public double Amp { get; set; }
 
         [XmlAttribute("duration")]
         public int Duration { get; set; }
@@ -86,5 +88,11 @@ namespace xivsim.config
 
         [XmlAttribute("combo")]
         public bool Combo { get; set; }
+
+        [XmlAttribute("crit")]
+        public double Crit { get; set; }
+
+        [XmlAttribute("direc")]
+        public double Direc { get; set; }
     }
 }

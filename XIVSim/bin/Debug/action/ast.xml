@@ -5,6 +5,6 @@
     <Action class="GCDAction" name="コンバラ" slip="50" duration="30" />
     <Action class="Ability" name="クラウンロード" power="300" recast="90" />
     <Action class="Ability" name="アーサリースター" power="200" recast="60" />
-    <Action class="Ability" name="クルセードスタンス" amplifier="1.05" recast="90" duration="15" />
+    <Action class="Ability" name="クルセードスタンス" amp="1.05" recast="90" duration="15" />
   </Actions>
 </ActionList>

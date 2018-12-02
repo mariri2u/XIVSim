@@ -5,11 +5,11 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class MoreRemain : AI
+    public class After : AI
     {
         public override bool IsAction()
         {
-            return Data.State[relation].Remain >= threshold_f;
+            return Data.Time >= threshold_i;
         }
     }
 }

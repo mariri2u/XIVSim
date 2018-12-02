@@ -2,16 +2,16 @@
 <ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Actions>
     <Action name="フェルクリーヴ">
-      <AI group="standard" class="MoreStack" relation="インナービースト" stack="70" />
-      <AI group="standard" class="Require" relation="シュトルムブレハ" />
-      <AI group="standard" class="Require" relation="メイム" />
-      <AI group="burst" class="Require" relation="原初の解放" />
+      <AI group="standard" class="MoreStack" action="インナービースト" value="70" />
+      <AI group="standard" class="Require" action="シュトルムブレハ" />
+      <AI group="standard" class="Require" action="メイム" />
+      <AI group="burst" class="Require" action="原初の解放" />
     </Action>
     <Action name="シュトルムブレハ">
-      <AI class="Update" remain="10"/>
+      <AI class="Update" value="10"/>
     </Action>
     <Action name="シュトルムヴィント">
-      <AI class="Require" relation="シュトルムブレハ" />
+      <AI class="Require" action="シュトルムブレハ" />
     </Action>
     <Action name="メイム">
       <AI class="NoWait" />
@@ -21,23 +21,23 @@
     </Action>
     <Action name="アップヒーバル">
       <AI class="NoInterrupt" />
-      <AI group="standard" class="Require" relation="シュトルムブレハ" />
-      <AI group="standard" class="Require" relation="メイム" />
-      <AI group="standard" class="MoreRecast" relation="原初の解放" recast="20" />
-      <AI group="burst" class="Require" relation="原初の解放" />
+      <AI group="standard" class="Require" action="シュトルムブレハ" />
+      <AI group="standard" class="Require" action="メイム" />
+      <AI group="standard" class="MoreRecast" action="原初の解放" value="20" />
+      <AI group="burst" class="Require" action="原初の解放" />
     </Action>
     <Action name="オンスロート">
       <AI class="NoInterrupt" />
-      <AI class="Require" relation="原初の解放" />
+      <AI class="Require" action="原初の解放" />
     </Action>
     <Action name="原初の解放">
       <AI class="NoInterrupt" />
-      <AI class="MoreRemain" relation="シュトルムブレハ" remain="10" />
-      <AI class="MoreRemain" relation="メイム" remain="10" />
+      <AI class="MoreRemain" action="シュトルムブレハ" value="10" />
+      <AI class="MoreRemain" action="メイム" value="10" />
     </Action>
     <Action name="ウォークライ">
       <AI class="NoInterrupt" />
-      <AI class="LessStack" relation="インナービースト" stack="50" />
+      <AI class="LessStack" action="インナービースト" value="50" />
     </Action>
   </Actions>
 </ActionAI>

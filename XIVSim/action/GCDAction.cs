@@ -11,9 +11,9 @@ namespace xivsim.action
 
         public void ApplyGlobal(double gcd)
         {
-            recast = gcd;
-            cast *= gcd;
-            motion = 0.1;
+            Recast = gcd;
+            Cast *= gcd;
+            Motion = 0.1;
         }
 
         public GCDAction(string name, int power, double cast, double recast)
@@ -33,7 +33,7 @@ namespace xivsim.action
         public override void CalcAction()
         {
             Data.Recast["global"] = Data.GetHaste() * (Recast - Cast);
-            if (combo) { Data.Before = this; }
+            if (Combo) { Data.Before = this; }
         }
     }
 }

@@ -8,7 +8,7 @@ namespace xivsim.ai
     {
         public override bool IsAction()
         {
-            return Data.State[relation].Duration < eps || Data.State[relation].Remain > eps;
+            return Data.State[relation].IsValid();
         }
     }
 }

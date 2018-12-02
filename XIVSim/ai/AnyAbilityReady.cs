@@ -5,7 +5,7 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class DoTReady : AI
+    public class AnyAbilityReady : AI
     {
         public override bool IsAction()
         {
@@ -13,7 +13,7 @@ namespace xivsim.ai
 
             foreach (Action act in Data.Action)
             {
-                if (act.Slip > 0)
+                if (act is IAbility)
                 {
                     result |= act.CanAction() && act.IsActionByAI(true);
                 }

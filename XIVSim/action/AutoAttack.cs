@@ -11,9 +11,9 @@ namespace xivsim.action
 
         public void ApplySpeed(double gcd)
         {
-            recast = gcd;
-            cast = 0.0;
-            motion = 0.1;
+            Recast = gcd;
+            Cast = 0.0;
+            Motion = 0.0;
 
             AI.Clear();
             AI.Add(new NoWait());

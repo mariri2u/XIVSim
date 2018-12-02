@@ -5,21 +5,18 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class AbilityReady : AI
+    public class ActionNotReady : AI
     {
         public override bool IsAction()
         {
-            bool result = false;
-
             foreach (Action act in Data.Action)
             {
-                if (act is IAbility)
+                if (act.Name == relation)
                 {
-                    result |= act.CanAction() && act.IsActionByAI(true);
+                    return !(act.CanAction() || act.IsActionByAI(true));
                 }
             }
-
-            return result;
+            return false;
         }
     }
 }

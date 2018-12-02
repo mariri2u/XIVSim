@@ -3,15 +3,15 @@
   <Actions>
     <Action class="AutoAttack" name="オートアタック" power="100" />
     <Action class="GCDAction" name="ヘビィスウィング" power="160" />
-    <Action class="GCDAction" name="メイム" power="200" duration="24" amplifier="1.1" relation="インナービースト" increase="10" before="ヘビィスウィング"/>
+    <Action class="GCDAction" name="メイム" power="200" duration="24" amp="1.1" relation="インナービースト" increase="10" before="ヘビィスウィング"/>
     <Action class="GCDAction" name="シュトルムヴィント" power="280" relation="インナービースト" increase="20" before="メイム" />
-    <Action class="GCDAction" name="シュトルムブレハ" power="280" duration="30" amplifier="1.1" relation="インナービースト" increase="10" before="メイム" />
+    <Action class="GCDAction" name="シュトルムブレハ" power="280" duration="30" amp="1.1" relation="インナービースト" increase="10" before="メイム" />
     <Action class="WarAction" name="フェルクリーヴ" power="520" relation="インナービースト" require="50" relationA="原初の解放" />
     <Action class="WarAbility" name="アップヒーバル" power="300" recast="30" relation="インナービースト" require="20" relationA="原初の解放" />
     <Action class="WarAbility" name="オンスロート" power="100" recast="15" relation="インナービースト" require="20" relationA="原初の解放" />
     <Action class="Ability" name="ウォークライ" recast="60" relation="インナービースト" increase="50" />
-    <Action class="Ability" name="原初の解放" recast="90" duration="10" amplifier="2.0" />
-    <Action class="NoAction" name="デストロイヤー" amplifier="1.05" />
-    <Action class="StackedBuff" name="インナービースト" max="100" amplifier="1.05" />
+    <Action class="Ability" name="原初の解放" recast="90" duration="10" crit="100" direc="100" />
+    <Action class="NoAction" name="デストロイヤー" amp="1.05" />
+    <Action class="StackedBuff" name="インナービースト" max="100" crit="1.1" />
   </Actions>
 </ActionList>

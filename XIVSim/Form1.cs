@@ -22,7 +22,7 @@ namespace xivsim
             double delta = 0.01;
 
             BattleManager ai = new BattleManager(delta, @"whm_combat.csv");
-            ai.Init(2.41, DamageTable.GetMagicTable(), @"action/whm.xml", @"ai/whm.xml");
+            ai.Init(2.41, DamageTable.GetHealerTable(), @"action/whm.xml", @"ai/whm.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {
@@ -38,7 +38,7 @@ namespace xivsim
             double delta = 0.01;
 
             BattleManager ai = new BattleManager(delta, @"ast_combat.csv");
-            ai.Init(2.45, DamageTable.GetMagicTable(), @"action/ast.xml", @"ai/ast.xml");
+            ai.Init(2.45, DamageTable.GetHealerTable(), @"action/ast.xml", @"ai/ast.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {
@@ -54,7 +54,7 @@ namespace xivsim
             double delta = 0.01;
 
             BattleManager ai = new BattleManager(delta, @"war_combat.csv");
-            ai.Init(2.37, DamageTable.GetPhysicTable(), @"action/war.xml", @"ai/war.xml");
+            ai.Init(2.37, DamageTable.GetTankTable(), @"action/war.xml", @"ai/war.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {
@@ -70,7 +70,7 @@ namespace xivsim
             double delta = 0.01;
 
             BattleManager ai = new BattleManager(delta, @"sch_combat.csv");
-            ai.Init(2.45, DamageTable.GetMagicTable(),  @"action/sch.xml", @"ai/sch.xml");
+            ai.Init(2.45, DamageTable.GetHealerTable(),  @"action/sch.xml", @"ai/sch.xml");
 
             for (double time = 0.0; time <= 1200; time += delta)
             {

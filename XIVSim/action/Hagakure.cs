@@ -8,12 +8,7 @@ namespace xivsim.action
     {
         public override bool CanAction()
         {
-            int sen = 0;
-            if (Data.State[RelationA].Stack > 0) { sen++; }
-            if (Data.State[RelationB].Stack > 0) { sen++; }
-            if (Data.State[RelationC].Stack > 0) { sen++; }
-
-            if (base.CanAction() && sen >= require) { return true; }
+            if (base.CanAction() && Data.State[RelationA].Stack > 0) { return true; }
             else { return false; }
         }
 
@@ -21,15 +16,8 @@ namespace xivsim.action
         {
             base.CalcAction();
 
-            int sen = 0;
-            if (Data.State[RelationA].Stack > 0) { sen++; }
-            if (Data.State[RelationB].Stack > 0) { sen++; }
-            if (Data.State[RelationC].Stack > 0) { sen++; }
-
+            Data.State[Relation].Stack += Increase * Data.State[RelationA].Stack;
             Data.State[RelationA].Stack = 0;
-            Data.State[RelationB].Stack = 0;
-            Data.State[RelationC].Stack = 0;
-            Data.State[Relation].Stack += increase * sen;
         }
     }
 }

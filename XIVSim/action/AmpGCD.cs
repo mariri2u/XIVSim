@@ -8,28 +8,14 @@ namespace xivsim.action
     {
         bool used = false;
 
-        public override void Tick()
-        {
-            base.Tick();
-            if(used)
-            {
-                stack--;
-                if(stack <= 0)
-                {
-                    Remain = 0.0;
-                }
-            }
-            used = false;
-        }
-
-        public override double Amplifier
+        public override double Amp
         {
             get
             {
                 if (Stack > 0 && Data.Plan is IGCD)
                 {
                     used = true;
-                    return amplifier;
+                    return base.Amp;
                 }
                 else
                 {
@@ -38,10 +24,18 @@ namespace xivsim.action
             }
         }
 
-        public override void CalcAction()
+        public override void DoneStep()
         {
-            base.CalcAction();
-            Stack = Max;
+            base.DoneStep();
+            if (used)
+            {
+                Stack--;
+                if (Stack <= 0)
+                {
+                    Remain = 0.0;
+                }
+            }
+            used = false;
         }
     }
 }

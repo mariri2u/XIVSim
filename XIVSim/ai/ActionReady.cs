@@ -5,7 +5,7 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class RelationReady : AI
+    public class ActionReady : AI
     {
         public override bool IsAction()
         {

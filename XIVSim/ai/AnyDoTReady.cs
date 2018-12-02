@@ -5,18 +5,21 @@ using xivsim.action;
 
 namespace xivsim.ai
 {
-    public class RelationNotReady : AI
+    public class AnyDoTReady : AI
     {
         public override bool IsAction()
         {
+            bool result = false;
+
             foreach (Action act in Data.Action)
             {
-                if (act.Name == relation)
+                if (act.Slip > 0)
                 {
-                    return !(act.CanAction() || act.IsActionByAI(true));
+                    result |= act.CanAction() && act.IsActionByAI(true);
                 }
             }
-            return false;
+
+            return result;
         }
     }
 }

@@ -10,50 +10,40 @@ namespace xivsim.action
     {
         protected const double eps = 1.0e-7;
 
-        protected string name;
-        protected int power;
-        protected double cast;
-        protected double recast;
-        protected double motion;
-        protected int slip;
-        protected int duration;
-        protected double amplifier;
-        protected string relation;
-        protected string relationA;
-        protected string relationB;
-        protected string relationC;
-        protected int require;
-        protected int increase;
-        protected string before;
-        protected int stack;
-        protected int max;
-        protected double haste;
-        protected bool combo;
+        // 固定値のパラメータ
+        public string Name { get; protected set; }
+        public int Power { get; protected set; }
+        public double Cast { get; protected set; }
+        public double Recast { get; protected set; }
+        public double Motion { get; protected set; }
+        public int Slip { get; protected set; }
+        public int Duration { get; protected set; }
+        public int Require { get; protected set; }
+        public int Increase { get; protected set; }
+        public int Max { get; protected set; }
+        public string Relation { get; protected set; }
+        public string RelationA { get; protected set; }
+        public string RelationB { get; protected set; }
+        public string RelationC { get; protected set; }
+        public string Before { get; protected set; }
+        public bool Combo { get; protected set; }
 
-        public double slipAmp;
+        public virtual double Amp { get; protected set; }
+        public virtual double Haste { get; protected set; }
+        public virtual double Crit { get; protected set; }
+        public virtual double Direc { get; protected set; }
 
-        public string Name { get { return name; } }
-        public int Power { get { return power; } }
-        public double Cast { get { return cast; } }
-        public double Recast { get { return recast; } }
-        public double Motion { get { return motion; } }
-        public int Slip { get { return slip; } }
-        public int Duration { get { return duration; } }
-        public virtual double Amplifier { get { return amplifier; } }
-        public string Relation { get { return relation; } }
-        public int Require { get { return require; } }
-        public int Increase { get { return increase; } }
-        public int Max { get { return max; } }
-        public virtual double Haste { get { return haste; } }
-        public string RelationA { get { return relationA; } }
-        public string RelationB { get { return relationB; } }
-        public string RelationC { get { return relationC; } }
-
+        // 状態量
         public double Remain { get; set; }
-        public virtual int Stack {
+        public double SlipAmp { get; set; }
+
+        protected int stack;
+        public virtual int Stack
+        {
             get { return stack; }
-            set {
-                if (value > max) { stack = max; }
+            set
+            {
+                if (value > Max) { stack = Max; }
                 else { stack = value; }
             }
         }
@@ -63,46 +53,47 @@ namespace xivsim.action
 
         public Action()
         {
-            this.name = null;
-            this.power = 0;
-            this.cast = 0;
-            this.recast = 0.0;
-            this.motion = 0.0;
-            this.slip = 0;
-            this.duration = 0;
-            this.amplifier = 0.0;
-            this.relation = null;
-            this.require = 0;
-            this.increase = 0;
-            this.before = null;
-            this.max = 0;
-            this.haste = 0.0;
-            this.slipAmp = 1.0;
+            Name = null;
+            Power = 0;
+            Cast = 0;
+            Recast = 0.0;
+            Motion = 0.0;
+            Slip = 0;
+            Duration = 0;
+            Amp = 0.0;
+            Relation = null;
+            Require = 0;
+            Increase = 0;
+            Before = null;
+            Max = 0;
+            Haste = 0.0;
+            Combo = true;
 
             Remain = 0.0;
             Stack = 0;
+            SlipAmp = 1.0;
 
-            this.AI = new List<AI>();
+            AI = new List<AI>();
         }
 
         public Action(string name, int power, double cast, double recast, double motion) : this()
         {
-            this.name = name;
-            this.power = power;
-            this.cast = cast;
-            this.recast = recast;
-            this.motion = motion;
+            Name = name;
+            Power = power;
+            Cast = cast;
+            Recast = recast;
+            Motion = motion;
         }
 
         public Action(string name, int power, double cast, double recast, double motion, int slip, int duration) : this()
         {
-            this.name = name;
-            this.power = power;
-            this.cast = cast;
-            this.recast = recast;
-            this.motion = motion;
-            this.slip = slip;
-            this.duration = duration;
+            Name = name;
+            Power = power;
+            Cast = cast;
+            Recast = recast;
+            Motion = motion;
+            Slip = slip;
+            Duration = duration;
         }
 
         public Action ResistAI(List<AI> ais)
@@ -132,7 +123,7 @@ namespace xivsim.action
         protected virtual bool InRelation()
         {
             if (Relation == null) { return true; }
-            else if( require == 0) { return true; }
+            else if( Require == 0) { return true; }
             else if (Data.State.ContainsKey(Relation) && Data.State[Relation].Stack >= Require) { return true; }
             else { return false; }
         }
@@ -140,9 +131,45 @@ namespace xivsim.action
         // 直前に実行したアクションの判定
         protected virtual bool InBefore()
         {
-            if(before == null) { return true; }
-            else if(Data.Before != null && Data.Before.Name == before) { return true; }
+            if(Before == null) { return true; }
+            else if(Data.Before != null && Data.Before.Name == Before) { return true; }
             else { return false; }
+        }
+
+        // 有効かどうか
+        public virtual bool IsValid()
+        {
+            bool result = true; ;
+
+            // 有効時間のあるアクションの場合
+            if (Duration > eps)
+            {
+                // 効果時間中の場合
+                if (Remain > eps)
+                {
+                    result &= true;
+                }
+                else
+                {
+                    result &= false;
+                }
+            }
+
+            // スタック数のあるアクションの場合
+            if (Max > 0)
+            {
+                // 効果時間中の場合
+                if (Stack > 0)
+                {
+                    result &= true;
+                }
+                else
+                {
+                    result &= false;
+                }
+            }
+
+            return result;
         }
 
         // どのAIも無視せず実行判定を行う
@@ -167,12 +194,12 @@ namespace xivsim.action
                 }
             }
 
-            // デフォルトグループは全てのグループの結果に影響する
+            // commonグループは全てのグループの結果に影響する
             bool all = true;
-            if (resultTable.ContainsKey("default"))
+            if (resultTable.ContainsKey("common"))
             {
-                all = resultTable["default"];
-                resultTable.Remove("default");
+                all = resultTable["common"];
+                resultTable.Remove("common");
             }
 
             // いずれかのグループがtrueなら実行する
@@ -192,8 +219,8 @@ namespace xivsim.action
             return result;
         }
 
-        // Actionを実行したとき
-        public void UseAction()
+        // Actionを実行開始したとき
+        public void StartAction()
         {
             // 詠唱がある場合
             if (Cast > eps)
@@ -201,15 +228,15 @@ namespace xivsim.action
                 Data.Recast["cast"] = Data.GetHaste() * Cast;
                 Data.Casting = this;
             }
-            // 詠唱が無い場合は、Action使用時点で詠唱完了したものとする
+            // 詠唱が無い場合は、Action使用時点で完了したものとする
             else
             {
-                DoneCast();
+                DoneAction();
             }
         }
 
-        // Actionの詠唱が完了したとき
-        public void DoneCast()
+        // Actionが完了したとき
+        public void DoneAction()
         {
             Data.Plan = this;
 
@@ -219,13 +246,13 @@ namespace xivsim.action
             // 着弾ダメージがある場合
             if (Power > 0)
             {
-                Data.Damage["action"] = Data.GetAmplifier() * Data.Table.Calc(Power);
+                Data.Damage["action"] = Data.GetAmp() * Data.Table.Calc(Power);
             }
 
             // DoTダメージがある場合
             if (Slip > 0)
             {
-                slipAmp = Data.GetAmplifier();
+                SlipAmp = Data.GetAmp();
             }
 
             // 設定すべき効果がある場合
@@ -234,13 +261,24 @@ namespace xivsim.action
                 Remain = Duration;
             }
 
+            // スタックする場合
+            if (Max > 0)
+            {
+                Stack = Max;
+            }
+
             // 関連アクションがある場合
-            if(relation != null)
+            if(Relation != null)
             {
                 CalcRelation();
             }
 
-            Data.Recast["motion"] = Motion;
+            // モーションリキャストが現在のActionのモーション値を上回っている場合のみ設定(AA対策)
+            if (Data.Recast["motion"] < Motion)
+            {
+                Data.Recast["motion"] = Motion;
+            }
+
             Data.History.Add(this);
             Data.Plan = null;
         }
@@ -248,15 +286,15 @@ namespace xivsim.action
         protected virtual void CalcRelation()
         {
             // スタック数を増やす場合
-            if (increase > 0)
+            if (Increase > 0)
             {
-                Data.State[relation].Stack += increase;
+                Data.State[Relation].Stack += Increase;
             }
 
             // スタック数を消費するアクションの場合
-            if (require > 0)
+            if (Require > 0)
             {
-                Data.State[Relation].Stack -= require;
+                Data.State[Relation].Stack -= Require;
             }
         }
 
@@ -268,12 +306,12 @@ namespace xivsim.action
         {
             if (this.Slip > 0 && Data.Recast["dot"] < eps)
             {
-                Data.Damage["dot"] += this.slipAmp * Data.Table.Calc(this.Slip);
+                Data.Damage["dot"] += this.SlipAmp * Data.Table.Calc(this.Slip);
             }
         }
 
         // Buffの効果が切れた場合
-        public virtual void ExpireBuff() { }
+        public virtual void DoneStep() { }
 
         public static Dictionary<string, Action> ListToMap(List<Action> list)
         {
@@ -289,45 +327,49 @@ namespace xivsim.action
 
         public void LoadConfig(ActionElement arg)
         {
-            this.power = arg.Power;
-            this.name = arg.Name;
-            this.cast = arg.Cast;
-            this.recast = arg.Recast;
-            this.motion = arg.Motion;
-            this.slip = arg.Slip;
-            this.duration = arg.Duration;
-            this.amplifier = arg.Amplifier;
-            this.relation = arg.Relation;
-            this.require = arg.Require;
-            this.increase = arg.Increase;
-            this.before = arg.Before;
-            this.max = arg.Max;
-            this.haste = arg.Haste;
-            this.relationA = arg.RelationA;
-            this.relationB = arg.RelationB;
-            this.relationC = arg.RelationC;
-            this.combo = arg.Combo;
+            Power = arg.Power;
+            Name = arg.Name;
+            Cast = arg.Cast;
+            Recast = arg.Recast;
+            Motion = arg.Motion;
+            Slip = arg.Slip;
+            Duration = arg.Duration;
+            Amp = arg.Amp;
+            Crit = arg.Crit;
+            Direc = arg.Direc;
+            Relation = arg.Relation;
+            Require = arg.Require;
+            Increase = arg.Increase;
+            Before = arg.Before;
+            Max = arg.Max;
+            Haste = arg.Haste;
+            RelationA = arg.RelationA;
+            RelationB = arg.RelationB;
+            RelationC = arg.RelationC;
+            Combo = arg.Combo;
         }
 
         public void SaveConfig(ActionElement arg)
         {
-            arg.Power = this.power;
-            arg.Name = this.name;
-            arg.Cast = this.cast;
-            arg.Recast = this.recast;
-            arg.Motion = this.motion;
-            arg.Slip = this.slip;
-            arg.Duration = this.duration;
-            arg.Amplifier = this.amplifier;
-            arg.Relation = this.relation;
-            arg.Require = this.require;
-            arg.Increase = this.increase;
-            arg.Before = this.before;
-            arg.Max = this.max;
-            arg.Haste = this.haste;
-            arg.RelationA = this.relationA;
-            arg.RelationB = this.relationB;
-            arg.RelationC = this.relationC;
+            arg.Power = Power;
+            arg.Name = Name;
+            arg.Cast = Cast;
+            arg.Recast = Recast;
+            arg.Motion = Motion;
+            arg.Slip = Slip;
+            arg.Duration = Duration;
+            arg.Amp = Amp;
+            arg.Crit = Crit;
+            arg.Direc = Direc;
+            arg.Relation = Relation;
+            arg.Require = Require;
+            arg.Increase = Increase;
+            arg.Before = Before;
+            arg.Max = Max;
+            arg.Haste = Haste;
+            arg.RelationA = RelationA;
+            arg.RelationB = RelationB;
+            arg.RelationC = RelationC;
         }
     }
 }

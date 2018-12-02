@@ -9,13 +9,10 @@ namespace xivsim.config
     {
         public AIElement()
         {
-            Group = "default";
+            Group = "common";
             Class = null;
-            Remain = 0.0;
-            Recast = 0.0;
             Relation = null;
-            Stack = 0;
-            Amplifier = 0.0;
+            Threshold = 0.0;
         }
 
         [XmlAttribute("group")]
@@ -24,19 +21,10 @@ namespace xivsim.config
         [XmlAttribute("class")]
         public string Class { get; set; }
 
-        [XmlAttribute("remain")]
-        public double Remain { get; set; }
-
-        [XmlAttribute("recast")]
-        public double Recast { get; set; }
-
-        [XmlAttribute("relation")]
+        [XmlAttribute("action")]
         public string Relation { get; set; }
 
-        [XmlAttribute("stack")]
-        public int Stack { get; set; }
-
-        [XmlAttribute("amplifier")]
-        public double Amplifier { get; set; }
+        [XmlAttribute("value")]
+        public double Threshold { get; set; }
     }
 }

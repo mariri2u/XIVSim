@@ -8,7 +8,7 @@ namespace xivsim.ai
     {
         public override bool IsAction()
         {
-            return Data.State[relation].Remain <= remain;
+            return Data.State[relation].Remain <= threshold_f;
         }
     }
 }

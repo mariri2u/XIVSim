@@ -4,7 +4,7 @@ using System.Text;
 
 namespace xivsim.action
 {
-    public class SamStack : Action
+    public class SamStack : NoAction
     {
         public override int Stack
         {
@@ -29,22 +29,13 @@ namespace xivsim.action
                     return;
                 }
 
-                if (value == 0)
+                if (value < 3)
                 {
                     Data.State[RelationA].Stack = 0;
                     Data.State[RelationB].Stack = 0;
                     Data.State[RelationC].Stack = 0;
                 }
             }
-        }
-
-        public override bool CanAction()
-        {
-            return false;
-        }
-
-        public override void CalcAction()
-        {
         }
     }
 }

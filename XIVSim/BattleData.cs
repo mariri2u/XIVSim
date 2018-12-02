@@ -11,6 +11,7 @@ namespace xivsim
 
         public BattleData()
         {
+            Time = 0.0;
 
             Recast = new Dictionary<string, double>();
             Damage = new Dictionary<string, double>();
@@ -26,6 +27,8 @@ namespace xivsim
         
         public void Clear()
         {
+            Time = 0.0;
+
             Recast.Clear();
             Damage.Clear();
             State.Clear();
@@ -36,14 +39,19 @@ namespace xivsim
             Reserve.Clear();
         }
 
-        public double GetAmplifier()
+        public double GetAmp()
+        {
+            return GetPureAmp() * GetCritAmp() * GetDirecAmp();
+        }
+
+        public double GetPureAmp()
         {
             double amp = 1.0;
             foreach (Action act in State.Values)
             {
-                if ((act.Duration < eps || act.Remain > eps) && act.Amplifier > eps)
+                if (act.IsValid() && act.Amp > eps)
                 {
-                    amp *= act.Amplifier;
+                    amp *= act.Amp;
                 }
             }
             return amp;
@@ -54,7 +62,7 @@ namespace xivsim
             double haste = 1.0;
             foreach(Action act in State.Values)
             {
-                if((act.Duration<eps || act.Remain>eps) && act.Haste > eps)
+                if(act.IsValid() && act.Haste > eps)
                 {
                     haste *= act.Haste;
                 }
@@ -62,6 +70,47 @@ namespace xivsim
             return haste;
         }
 
+        public double GetCritProb()
+        {
+            double prob = Table.BaseCritProb;
+            foreach (Action act in State.Values)
+            {
+                if (act.IsValid() && act.Crit > eps)
+                {
+                    prob *= act.Crit;
+                    if (act.Crit >= 10) { return 1.0; }
+                    if (prob >= 1.0) { return 1.0; }
+                }
+            }
+            return prob;
+        }
+
+        public double GetCritAmp()
+        {
+            return DamageTable.CalcExpect(GetCritProb(), Table.BaseCritAmp);
+        }
+
+        public double GetDirecProb()
+        {
+            double prob = Table.BaseDirecProb;
+            foreach (Action act in State.Values)
+            {
+                if (act.IsValid() && act.Direc > eps)
+                {
+                    prob *= act.Direc;
+                    if (act.Direc >= 10) { return 1.0; }
+                    if (prob >= 1.0) { return 1.0; }
+                }
+            }
+            return prob;
+        }
+
+        public double GetDirecAmp()
+        {
+            return DamageTable.CalcExpect(GetDirecProb(), Table.BaseDirecAmp);
+        }
+
+        public double Time { get; set; }
         public Dictionary<string, double> Recast { get; }
         public Dictionary<string, double> Damage { get; }
         public Dictionary<string, Action> State { get; }
