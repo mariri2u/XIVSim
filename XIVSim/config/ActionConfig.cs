@@ -19,22 +19,15 @@ namespace xivsim.config
             List = new List<ActionElement>();
         }
 
-        public void Add(Action act)
+        public void Add(Action act, string name)
         {
             ActionElement elm = new ActionElement();
 
             elm.Class = act.GetType().Name;
+            elm.Name = name;
             act.SaveConfig(elm);
 
             List.Add(elm);
-        }
-
-        public void AddAll(List<Action> acts)
-        {
-            foreach(Action act in acts)
-            {
-                Add(act);
-            }
         }
 
         public List<Action> GetAll()

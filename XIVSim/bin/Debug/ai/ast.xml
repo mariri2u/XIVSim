@@ -15,7 +15,7 @@
     </Action>
     <Action name="クルセードスタンス">
       <AI class="NoInterrupt" />
-      <AI class="LessRemain" action="コンバラ" value="5" />
+      <AI class="LessRemain" action="コンバラ" value="15" />
     </Action>
   </Actions>
 </ActionAI>

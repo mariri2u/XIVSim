@@ -64,6 +64,7 @@
     <Compile Include="ai\MoreRecast.cs" />
     <Compile Include="ai\Before.cs" />
     <Compile Include="ai\PrevAction.cs" />
+    <Compile Include="ai\Invalid.cs" />
     <Compile Include="ai\Require.cs" />
     <Compile Include="ai\Update.cs" />
     <Compile Include="ai\MoreStack.cs" />

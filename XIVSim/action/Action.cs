@@ -76,26 +76,6 @@ namespace xivsim.action
             AI = new List<AI>();
         }
 
-        public Action(string name, int power, double cast, double recast, double motion) : this()
-        {
-            Name = name;
-            Power = power;
-            Cast = cast;
-            Recast = recast;
-            Motion = motion;
-        }
-
-        public Action(string name, int power, double cast, double recast, double motion, int slip, int duration) : this()
-        {
-            Name = name;
-            Power = power;
-            Cast = cast;
-            Recast = recast;
-            Motion = motion;
-            Slip = slip;
-            Duration = duration;
-        }
-
         public Action ResistAI(List<AI> ais)
         {
             foreach (AI ai in ais)

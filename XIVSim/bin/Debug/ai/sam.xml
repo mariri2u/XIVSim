@@ -2,32 +2,32 @@
 <ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Actions>
     <Action name="彼岸花">
-      <AI class="MoreStack" action="必殺剣・回天" value="1" />
+      <AI class="Require" action="必殺剣・回天" />
     </Action>
     <Action name="乱れ雪月花">
-      <AI class="MoreStack" action="必殺剣・回天" value="1" />
+      <AI class="Require" action="必殺剣・回天" />
     </Action>
     <Action name="月光">
       <AI group="combo" class="PrevAction" action="陣風" />
-      <AI group="mei" class="MoreStack" action="明鏡止水" value="1" />
-      <AI group="mei" class="LessStack" action="月の閃" value="0" />
+      <AI group="mei" class="Require" action="明鏡止水" />
+      <AI group="mei" class="Invalid" action="月の閃" />
     </Action>
     <Action name="花車">
       <AI group="combo" class="PrevAction" action="士風" />
-      <AI group="mei" class="MoreStack" action="明鏡止水" value="1" />
-      <AI group="mei" class="LessStack" action="花の閃" value="0" />
+      <AI group="mei" class="Require" action="明鏡止水" />
+      <AI group="mei" class="Invalid" action="花の閃" />
     </Action>
     <Action name="陣風">
       <AI group="update" class="Update" value="10"/>
-      <AI group="combo" class="LessStack" action="月の閃" value="0" />
+      <AI group="combo" class="Invalid" action="月の閃" />
     </Action>
     <Action name="士風">
       <AI group="update" class="Update" value="10"/>
-      <AI group="combo" class="LessStack" action="花の閃" value="0" />
+      <AI group="combo" class="Invalid" action="花の閃" />
     </Action>
     <Action name="雪風">
       <AI group="update" class="Update" value="10"/>
-      <AI group="combo" class="LessStack" action="雪の閃" value="0" />
+      <AI group="combo" class="Invalid" action="雪の閃" />
     </Action>
     <Action name="刃風">
       <AI class="NoWait" />

@@ -2,22 +2,26 @@
 <ActionAI xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Actions>
     <Action name="バイオラ">
-      <AI group="update" class="Update" value="2" />
-      <AI group="amp" class="MoreAmp" value="1.2" />
-    </Action>
-    <Action name="ルインラ">
-      <AI class="AnyAbilityReady" />
+      <AI class="Update" value="2" />
     </Action>
     <Action name="ミアズマ">
-      <AI group="update" class="Update" value="4" />
-      <AI group="amp" class="MoreAmp" value="1.2" />
+      <AI class="Update" value="4" />
+    </Action>
+    <Action name="ルインラ">
+      <AI group="ren" class="ActionReady" action="連環計" />
+      <AI group="fla" class="ActionReady" action="シャドウフレア" />
+      <AI group="ene" class="ActionReady" action="エナジードレイン" />
+      <AI group="cr1" class="LessRemain" action="バイオラ" value="15" />
+      <AI group="cr1" class="ActionReady" action="クルセードスタンス" />
+      <AI group="cr2" class="LessRemain" action="ミアズマ" value="15" />
+      <AI group="cr2" class="ActionReady" action="クルセードスタンス" />
     </Action>
     <Action name="魔炎法">
       <AI class="NoWait" />
     </Action>
     <Action name="エーテルフロー">
       <AI class="NoInterrupt" />
-      <AI class="LessStack" action="エーテルフロー" value="0" />
+      <AI class="Update" />
     </Action>
     <Action name="連環計">
       <AI class="NoInterrupt" />

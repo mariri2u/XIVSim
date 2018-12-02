@@ -18,6 +18,8 @@ namespace xivsim
         private int frame;
         private int fps;
         private double totalDmg;
+        private double frameDmg;
+        private double[] stepDmg;
 
         private Logger logs;
 
@@ -70,16 +72,22 @@ namespace xivsim
         public BattleManager(double delta, string fname)
         {
             this.delta = delta;
-            this.frame = 0;
-            this.time = 0.0;
-            this.fps = (int)(1 / delta);
-            this.data = new BattleData();
+            frame = 0;
+            time = 0.0;
+            fps = (int)(1 / delta);
+            data = new BattleData();
+            stepDmg = new double[3000];
+            for(int i = 0; i < stepDmg.Length; i++)
+            {
+                stepDmg[i] = 0.0;
+            }
             logs = new Logger(fname);
         }
 
         public void Init(double gcd, DamageTable table, string actfile, string aifile)
         {
             data.Table = table;
+
             data.Action = this.CreateAction(gcd, actfile);
             Dictionary<string, List<AI>> ais = this.CreateAI(aifile);
             ConstructActionAndAI(data.Action, ais);
@@ -110,7 +118,7 @@ namespace xivsim
                     data.Recast[act.Name] = 0.0;
                 }
 
-                if (act.Duration > 0 || act.Max > 0 || act.Amp > eps || act.Haste > eps)
+                if (act.Duration > 0 || act.Max > 0 || act.Amp > eps || act.Haste > eps || act.Crit > eps || act.Direc > eps)
                 {
                     data.State[act.Name] = act;
                 }
@@ -124,11 +132,10 @@ namespace xivsim
             if (config == null)
             {
                 actions = new List<Action>();
-                actions.Add(new GCDAction("マレフィガ", 220, 0.6, 1.0));
-                actions.Add(new GCDAction("コンバラ", 0, 0.0, 1.0, 50, 30));
-                actions.Add(new Ability("クラウンロード", 300, 90));
                 config = new ActionConfig();
-                config.AddAll(actions);
+                config.Add(new GCDAction(), "マレフィガ");
+                config.Add(new GCDAction(), "コンバラ");
+                config.Add(new Ability(), "クラウンロード");
                 config.Save(fname);
             }
             else
@@ -191,7 +198,24 @@ namespace xivsim
 
         public double CalcDps()
         {
-            return totalDmg / time;
+            if (time < eps) { return 0; }
+            else { return totalDmg / time; }
+        }
+
+        public double CalcSecDps(int sec)
+        {
+            double dmg = 0.0;
+            int end = frame / fps - 1;
+            int start = end - sec;
+
+            if (start < 0) { start = 0; }
+            if (end <= start) { return 0.0; }
+
+            for (int i = start; i <= end; i++)
+            {
+                dmg += stepDmg[i];
+            }
+            return dmg / (end - start);
         }
 
         private void InitStep()
@@ -245,83 +269,80 @@ namespace xivsim
         // DoTのダメージとAIの行動結果をマージする
         private void MergeDamage()
         {
+            frameDmg = 0.0;
             foreach( string key in data.Damage.Keys )
             {
-                totalDmg += data.Damage[key];
+                frameDmg += data.Damage[key];
             }
+            stepDmg[frame / fps] += frameDmg;
+            totalDmg += frameDmg;
         }
 
         // ステップの結果をログにダンプする
         private void Dump()
         {
-            logs.AddDouble("time", time);
-
-            if( used != null )
-            {
-                logs.AddText("action", used.Name);
-            }
-            else
-            {
-                logs.AddText("action", "none");
-            }
-
-            if (Data.Before != null)
-            {
-                logs.AddText("before", Data.Before.Name);
-            }
-            else
-            {
-                logs.AddText("before", "none");
-            }
-
-            logs.AddDouble("pureamp", Data.GetPureAmp());
-            logs.AddDouble("critprob", Data.GetCritProb());
-            logs.AddDouble("critamp", Data.GetCritAmp());
-            logs.AddDouble("direcprob", Data.GetDirecProb());
-            logs.AddDouble("direcamp", Data.GetDirecAmp());
-            logs.AddDouble("amp", Data.GetAmp());
-            logs.AddDouble("haste", Data.GetHaste());
-
-            double dmg = 0.0;
-            foreach( string key in data.Damage.Keys )
-            {
-                dmg += data.Damage[key];
-                logs.AddDouble(key + ".damage", data.Damage[key]);
-            }
-            logs.AddDouble("damage", dmg);
-
-            foreach (string key in data.State.Keys)
-            {
-                if (data.State[key].Duration > 0)
-                {
-                    logs.AddDouble(key + ".remain", data.State[key].Remain);
-                }
-            }
-
-            foreach (string key in data.State.Keys)
-            {
-                if (data.State[key].Max > 0)
-                {
-                    logs.AddInt(key + ".stack", data.State[key].Stack);
-                }
-            }
-            
-            foreach (string key in data.Recast.Keys)
-            {
-                logs.AddDouble(key + ".recast", data.Recast[key]);
-            }
-
-            logs.AddDouble("totalDamage", totalDmg);
-            double dps = CalcDps();
-            if(time < eps)
-            {
-                dps = 0.0;
-            }
-            logs.AddDouble("dps", dps);
-
             // 何らかの状態に変化があった場合のみダンプする
-            if (frame % fps == 0 || dmg > eps || used != null)
+            if (frame % fps == 0 || frameDmg > eps || used != null)
             {
+                logs.AddDouble("time", time);
+
+                if (used != null)
+                {
+                    logs.AddText("action", used.Name);
+                }
+                else
+                {
+                    logs.AddText("action", "none");
+                }
+
+                if (Data.Before != null)
+                {
+                    logs.AddText("before", Data.Before.Name);
+                }
+                else
+                {
+                    logs.AddText("before", "none");
+                }
+
+                logs.AddDouble("dmg.sec", stepDmg[frame / fps]);
+                logs.AddDouble("dps.sec", CalcSecDps(15));
+                logs.AddDouble("dmg.all", totalDmg);
+                logs.AddDouble("dps.all", CalcDps());
+
+                logs.AddDouble("pureamp", Data.GetPureAmp());
+                logs.AddDouble("critprob", Data.GetCritProb());
+                logs.AddDouble("critamp", Data.GetCritAmp());
+                logs.AddDouble("direcprob", Data.GetDirecProb());
+                logs.AddDouble("direcamp", Data.GetDirecAmp());
+                logs.AddDouble("amp", Data.GetAmp());
+                logs.AddDouble("haste", Data.GetHaste());
+
+                foreach (string key in data.Damage.Keys)
+                {
+                    logs.AddDouble(key + ".damage", data.Damage[key]);
+                }
+                logs.AddDouble("damage", frameDmg);
+
+                foreach (string key in data.State.Keys)
+                {
+                    if (data.State[key].Duration > 0)
+                    {
+                        logs.AddDouble(key + ".remain", data.State[key].Remain);
+                    }
+                }
+
+                foreach (string key in data.State.Keys)
+                {
+                    if (data.State[key].Max > 0)
+                    {
+                        logs.AddInt(key + ".stack", data.State[key].Stack);
+                    }
+                }
+
+                foreach (string key in data.Recast.Keys)
+                {
+                    logs.AddDouble(key + ".recast", data.Recast[key]);
+                }
                 logs.Dump();
             }
             else
@@ -344,7 +365,7 @@ namespace xivsim
                 Data.State[key].DoneStep();
                 Data.State[key].Remain -= delta;
             }
-            
+
             frame++;
             time += delta;
             Data.Time = time;
