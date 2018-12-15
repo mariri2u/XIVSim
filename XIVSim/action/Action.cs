@@ -49,7 +49,6 @@ namespace xivsim.action
         }
 
         public BattleData Data { get; set; }
-        public List<AI> AI { get; }
 
         public Action()
         {
@@ -72,18 +71,6 @@ namespace xivsim.action
             Remain = 0.0;
             Stack = 0;
             SlipAmp = 1.0;
-
-            AI = new List<AI>();
-        }
-
-        public Action ResistAI(List<AI> ais)
-        {
-            foreach (AI ai in ais)
-            {
-                ai.Action = this;
-                AI.Add(ai);
-            }
-            return this;
         }
 
         public virtual bool CanAction()
@@ -147,53 +134,6 @@ namespace xivsim.action
                 {
                     result &= false;
                 }
-            }
-
-            return result;
-        }
-
-        // どのAIも無視せず実行判定を行う
-        public bool IsActionByAI() { return IsActionByAI(false); }
-
-        public bool IsActionByAI(bool ignore)
-        {
-            // グループ毎に実行判定を行う
-            Dictionary<string, bool> resultTable = new Dictionary<string, bool>();
-            foreach (AI ai in AI)
-            {
-                // 各グループの初期値はtrue
-                if(!resultTable.ContainsKey(ai.Group))
-                {
-                    resultTable[ai.Group] = true;
-                }
-
-                // 引数がtrueの場合はNoInterruptを無視する
-                if (!ignore || !(ai is NoInterrupt))
-                {
-                    resultTable[ai.Group] &= ai.IsAction();
-                }
-            }
-
-            // commonグループは全てのグループの結果に影響する
-            bool all = true;
-            if (resultTable.ContainsKey("common"))
-            {
-                all = resultTable["common"];
-                resultTable.Remove("common");
-            }
-
-            // いずれかのグループがtrueなら実行する
-            bool result = false;
-            if (resultTable.Count > 0)
-            {
-                foreach (bool res in resultTable.Values)
-                {
-                    result |= res & all;
-                }
-            }
-            else
-            {
-                result = all;
             }
 
             return result;

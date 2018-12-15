@@ -30,16 +30,16 @@ namespace xivsim.config
             List.Add(elm);
         }
 
-        public List<Action> GetAll()
+        public Dictionary<string,Action> Get()
         {
-            List<Action> acts = new List<Action>();
+            Dictionary<string,Action> acts = new Dictionary<string,Action>();
 
             foreach(ActionElement elm in List)
             {
                 Type type = Type.GetType("xivsim.action." + elm.Class);
                 Action act = (Action)Activator.CreateInstance(type);
                 act.LoadConfig(elm);
-                acts.Add(act);
+                acts[elm.Name] = act;
             }
 
             return acts;

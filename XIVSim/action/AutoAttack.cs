@@ -14,9 +14,6 @@ namespace xivsim.action
             Recast = gcd;
             Cast = 0.0;
             Motion = 0.0;
-
-            AI.Clear();
-            AI.Add(new NoWait());
         }
 
         public override bool CanAction()

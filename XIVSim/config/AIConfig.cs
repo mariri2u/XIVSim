@@ -44,31 +44,22 @@ namespace xivsim.config
             pair.AI.Add(elm);
         }
 
-        public List<AI> Get(string key)
+        public List<ActionAI> Get()
         {
-            List<AIElement> aicfg = null;
+            List<ActionAI> ais = new List<ActionAI>();
             foreach(AIPair pair in List)
             {
-                if(pair.Action == key)
+                ActionAI aa = new ActionAI();
+                aa.Name = pair.Action;
+                foreach (AIElement elm in pair.AI)
                 {
-                    aicfg = pair.AI;
-                    break;
+                    Type type = Type.GetType("xivsim.ai." + elm.Class);
+                    AI ai = (AI)Activator.CreateInstance(type);
+                    ai.Name = pair.Action;
+                    ai.LoadConfig(elm);
+                    aa.AddAI(ai);
                 }
-            }
-
-            if(aicfg == null)
-            {
-                aicfg = new List<AIElement>();
-            }
-
-            List<AI> ais = new List<AI>();
-            foreach(AIElement elm in aicfg)
-            {
-                Type type = Type.GetType("xivsim.ai." + elm.Class);
-                AI ai = (AI)Activator.CreateInstance(type);
-                ai.Name = key;
-                ai.LoadConfig(elm);
-                ais.Add(ai);
+                ais.Add(aa);
             }
 
             return ais;

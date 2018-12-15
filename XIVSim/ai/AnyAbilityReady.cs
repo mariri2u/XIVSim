@@ -11,11 +11,11 @@ namespace xivsim.ai
         {
             bool result = false;
 
-            foreach (Action act in Data.Action)
+            foreach (ActionAI aa in Data.ActionAI)
             {
-                if (act is IAbility)
+                if (Data.Action[aa.Name] is IAbility)
                 {
-                    result |= act.CanAction() && act.IsActionByAI(true);
+                    result |= Data.Action[relation].CanAction() && aa.IsActionByAnyAI();
                 }
             }
 

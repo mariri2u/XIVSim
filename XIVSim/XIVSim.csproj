@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionAI.cs" />
     <Compile Include="action\AmpGCD.cs" />
     <Compile Include="action\AutoAttack.cs" />
     <Compile Include="action\SamCombo.cs" />

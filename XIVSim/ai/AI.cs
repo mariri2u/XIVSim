@@ -12,6 +12,7 @@ namespace xivsim.ai
 
         public Action Action { get; set; }
         public BattleData Data { get; set; }
+        public ActionAI ActionAI { get; set; }
         public string Name { get; set; }
 
         protected string group;

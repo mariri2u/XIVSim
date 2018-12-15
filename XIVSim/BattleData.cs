@@ -120,7 +120,8 @@ namespace xivsim
         public List<Action> History { get; }
         public List<Action> Reserve { get; }
 
-        public List<Action> Action { get; set; }
+        public Dictionary<string,Action> Action { get; set; }
+        public List<ActionAI> ActionAI { get; set; }
         public DamageTable Table { get; set; }
     }
 }

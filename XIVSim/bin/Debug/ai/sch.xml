@@ -11,10 +11,10 @@
       <AI group="ren" class="ActionReady" action="連環計" />
       <AI group="fla" class="ActionReady" action="シャドウフレア" />
       <AI group="ene" class="ActionReady" action="エナジードレイン" />
-      <AI group="cr1" class="LessRemain" action="バイオラ" value="15" />
-      <AI group="cr1" class="ActionReady" action="クルセードスタンス" />
-      <AI group="cr2" class="LessRemain" action="ミアズマ" value="15" />
-      <AI group="cr2" class="ActionReady" action="クルセードスタンス" />
+      <AI group="bio" class="LessRemain" action="バイオラ" value="15" />
+      <AI group="bio" class="ActionReady" action="クルセードスタンス" />
+      <AI group="mia" class="LessRemain" action="ミアズマ" value="15" />
+      <AI group="mia" class="ActionReady" action="クルセードスタンス" />
     </Action>
     <Action name="魔炎法">
       <AI class="NoWait" />

@@ -7,17 +7,25 @@
     <Action name="乱れ雪月花">
       <AI class="Require" action="必殺剣・回天" />
     </Action>
-    <Action name="月光">
-      <AI group="combo" class="PrevAction" action="陣風" />
-      <AI group="mei" class="Require" action="明鏡止水" />
-      <AI group="mei" class="Invalid" action="月の閃" />
+    <Action name="月光" comment="mei">
+      <AI class="Require" action="明鏡止水" />
+      <AI class="Invalid" action="月の閃" />
     </Action>
-    <Action name="花車">
-      <AI group="combo" class="PrevAction" action="士風" />
-      <AI group="mei" class="Require" action="明鏡止水" />
-      <AI group="mei" class="Invalid" action="花の閃" />
+    <Action name="花車" comment="mei">
+      <AI class="Require" action="明鏡止水" />
+      <AI class="Invalid" action="花の閃" />
     </Action>
-    <Action name="陣風">
+    <Action name="雪風" comment="mei">
+      <AI class="Require" action="明鏡止水" />
+      <AI class="Invalid" action="雪の閃" />
+    </Action>
+    <Action name="月光" comment="combo">
+      <AI class="NoWait" />
+    </Action>
+    <Action name="花車" comment="combo">
+      <AI class="NoWait" />
+    </Action>
+    <Action name="陣風" comment="combo">
       <AI group="update" class="Update" value="10"/>
       <AI group="combo" class="Invalid" action="月の閃" />
     </Action>

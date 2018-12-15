@@ -11,11 +11,11 @@ namespace xivsim.ai
         {
             bool result = false;
 
-            foreach (Action act in Data.Action)
+            foreach (Action act in Data.Action.Values)
             {
                 if (act.Slip > 0)
                 {
-                    result |= act.CanAction() && act.IsActionByAI(true);
+                    result |= act.CanAction() && ActionAI.IsActionByAnyAI();
                 }
             }
 

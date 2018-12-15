@@ -9,14 +9,7 @@ namespace xivsim.ai
     {
         public override bool IsAction()
         {
-            foreach (Action act in Data.Action)
-            {
-                if (act.Name == relation)
-                {
-                    return act.CanAction() && act.IsActionByAI(true);
-                }
-            }
-            return false;
+            return Data.Action[relation].CanAction() && ActionAI.IsActionByAnyAI();
         }
     }
 }

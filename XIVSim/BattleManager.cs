@@ -37,34 +37,26 @@ namespace xivsim
             get { return used; }
         }
 
-        protected void ConstructActionAndAI(List<Action> acts, Dictionary<string,List<AI>> ais)
+        protected void ConstructActionAndAI(Dictionary<string,Action> acts, List<ActionAI> ais)
         {
-            Dictionary<string, Action> actmap = Action.ListToMap(acts);
-
-            // AIで定義された順にActionをソートしてAIをActionに登録する
-            acts.Clear();
-            foreach (string key in ais.Keys)
+            foreach (ActionAI aa in ais)
             {
-                Action act = actmap[key];
-                act.ResistAI(ais[key]);
-                acts.Add(act);
+                aa.Action = acts[aa.Name];
+                foreach (AI ai in aa.AI)
+                {
+                    ai.Action = acts[aa.Name];
+                }
             }
 
-            // AIで定義されていないActionを登録
-            foreach (string key in actmap.Keys)
+            foreach (Action act in acts.Values)
             {
-                bool contain = false;
-                foreach (Action act in acts)
+                if (act is AutoAttack)
                 {
-                    if (act.Name == key)
-                    {
-                        contain = true;
-                        break;
-                    }
-                }
-                if (!contain)
-                {
-                    acts.Add(actmap[key]);
+                    ActionAI aa = new ActionAI();
+                    aa.Name = act.Name;
+                    aa.Action = act;
+                    aa.AddAI(new NoWait());
+                    ais.Add(aa);
                 }
             }
         }
@@ -88,9 +80,9 @@ namespace xivsim
         {
             data.Table = table;
 
-            data.Action = this.CreateAction(gcd, actfile);
-            Dictionary<string, List<AI>> ais = this.CreateAI(aifile);
-            ConstructActionAndAI(data.Action, ais);
+            data.Action = CreateAction(gcd, actfile);
+            data.ActionAI = CreateAI(aifile);
+            ConstructActionAndAI(data.Action, data.ActionAI);
 
             time = 0.0;
             frame = 0;
@@ -105,13 +97,9 @@ namespace xivsim
 
             used = null;
 
-            foreach (Action act in data.Action)
+            foreach (Action act in data.Action.Values)
             {
                 act.Data = data;
-                foreach (AI ai in act.AI)
-                {
-                    ai.Data = this.Data;
-                }
 
                 if (act is IAbility)
                 {
@@ -123,28 +111,34 @@ namespace xivsim
                     data.State[act.Name] = act;
                 }
             }
+
+            foreach (ActionAI aa in data.ActionAI)
+            {
+                aa.Data = Data;
+
+                foreach (AI ai in aa.AI)
+                {
+                    ai.Data = Data;
+                }
+            }
         }
 
-        private List<Action> CreateAction(double gcd, string fname)
+        private Dictionary<string,Action> CreateAction(double gcd, string fname)
         {
             ActionConfig config = ActionConfig.Load(fname);
-            List<Action> actions = null;
+            Dictionary<string,Action> actions = null;
             if (config == null)
             {
-                actions = new List<Action>();
                 config = new ActionConfig();
                 config.Add(new GCDAction(), "マレフィガ");
                 config.Add(new GCDAction(), "コンバラ");
                 config.Add(new Ability(), "クラウンロード");
                 config.Save(fname);
             }
-            else
-            {
-                actions = config.GetAll();
-            }
+            actions = config.Get();
 
             // GCDアクションのリキャストと詠唱とモーションを書き換える
-            foreach(Action act in actions)
+            foreach(Action act in actions.Values)
             {
                 if(act is IGCD g)
                 {
@@ -159,7 +153,7 @@ namespace xivsim
             return actions;
         }
 
-        private Dictionary<string,List<AI>> CreateAI(string fname)
+        private List<ActionAI> CreateAI(string fname)
         {
             AIConfig config = AIConfig.Load(fname);
             if (config == null)
@@ -171,12 +165,7 @@ namespace xivsim
                 config.Save(fname);
             }
 
-            Dictionary<string, List<AI>> ais = new Dictionary<string, List<AI>>();
-
-            foreach (AIPair pair in config.List)
-            {
-                ais[pair.Action] = config.Get(pair.Action);
-            }
+            List<ActionAI> ais = config.Get();
 
             return ais;
         }
@@ -246,12 +235,12 @@ namespace xivsim
         {
             if (Data.Casting == null)
             {
-                foreach (Action act in data.Action)
+                foreach (ActionAI aa in data.ActionAI)
                 {
-                    if (act.CanAction() && act.IsActionByAI())
+                    if (aa.Action.CanAction() && aa.IsActionByAI())
                     {
-                        used = act;
-                        act.StartAction();
+                        used = aa.Action;
+                        aa.Action.StartAction();
                         break;
                     }
                 }

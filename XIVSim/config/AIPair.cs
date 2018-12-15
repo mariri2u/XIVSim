@@ -10,6 +10,9 @@ namespace xivsim.config
         [XmlAttribute("name")]
         public string Action { get; set; }
 
+        [XmlAttribute("comment")]
+        public string Comment { get; set; }
+
         [XmlElement("AI")]
         public List<AIElement> AI { get; set; }
     }
